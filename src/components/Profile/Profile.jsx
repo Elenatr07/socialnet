@@ -1,8 +1,9 @@
 import React from "react";
+import MyPosts from "./MyPosts/MyPosts";
 
 function Profile () {
     return (
-        <div className='main_content'>
+        <div >
         <div>
              <img className='main_content_img' src='https://static.tildacdn.com/tild3031-6564-4332-a464-643231303036/39.jpg'></img>
         </div>
@@ -17,16 +18,8 @@ function Profile () {
                  <a src="#">Web Site</a>
              </div>
         </div>
-        <div>
-              <h3>Mi posts</h3>
-              <div>New posts</div>
-         </div>
-         <div>
-             post 1
-         </div>
-         <div>
-             post 2
-         </div>
+        <MyPosts />
+       
        
         </div>
     )
