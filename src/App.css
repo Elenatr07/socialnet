@@ -23,24 +23,14 @@
   grid-area: main_content;
   background-color: whitesmoke;
 }
-.main_content_img {
-  width: 100%;
-}
+
 .header_title {
   text-align: center;
   margin: 0 auto;
 }
-.content_logo {
-  width: 100px;
-  height: 100%;
-  margin-left: 25px ;
-}
-.ava {
-  display: flex;
-}
-.description {
-  margin-left: 25px;
-}
+
+
+
 .description h3, .description p {
   margin-top: 5px;
   margin-bottom: 5px;

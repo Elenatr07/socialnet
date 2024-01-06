@@ -1,0 +1,15 @@
+.ava {
+    display: flex;
+  }
+.content_logo {
+    width: 100px;
+    height: 100%;
+    margin-left: 25px ;
+    margin-top: 15px;
+}
+.description {
+    margin-left: 25px;
+  }
+  .main_content_img {
+    width: 100%;
+  }
