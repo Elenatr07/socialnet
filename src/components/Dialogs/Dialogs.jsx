@@ -3,6 +3,8 @@ import style from "./Dialogs.module.css"
 
 import Dialog from './Dialog/Dialog'
 import Message from './Message/Message'
+import { sendMessageCreator, updateNewMessageTextCreator } from '../../redux/dialogsReducer'
+
 
 
 
@@ -13,18 +15,27 @@ import Message from './Message/Message'
 export default function Dialogs(props) {
 
 
-let dialogsElements = props.dialogsData.map((obj) => {
+let dialogsElements = props.dialogsPage.dialogsData.map((obj) => {
     return(
        <Dialog key={obj.id} name={obj.name} id={obj.id} /> 
     )
     
 })
 
-let messagesElemants = props.messageData.map((obj) => {
+let messagesElemants = props.dialogsPage.messageData.map((obj) => {
     return (
-         <Message key={obj.id} message={obj.message} id={obj.id} />
+       <div><Message key={obj.id} message={obj.message} id={obj.id} /></div>  
+       
     )
 })
+
+let onSendMessageClick =() => {
+    props.dispatch(sendMessageCreator())
+}
+let onMessageChange = (e) => {
+    let text = e.target.value
+    props.dispatch(updateNewMessageTextCreator(text))
+}
 
   return (
     <div className={style.dialogs}> 
@@ -36,7 +47,18 @@ let messagesElemants = props.messageData.map((obj) => {
 
         </div>
     <div className={style.messages}> 
-        {messagesElemants}
+        <div>{messagesElemants}</div>
+        <div>
+            <div className={style.block_textarea}>
+                <textarea 
+                placeholder='Enter your message'
+                value={props.dialogsPage.newMessageText}
+                onChange={onMessageChange}
+                ></textarea></div>
+            <div className={style.button_block}>
+                <button className={style.send_message} onClick={onSendMessageClick}>Send</button>
+            </div>
+        </div>
         </div>
     
     </div>

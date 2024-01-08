@@ -8,6 +8,7 @@ import Profile from './components/Profile/Profile';
 
 
 
+
 function App(props) {
   return (
     <BrowserRouter> 
@@ -17,12 +18,18 @@ function App(props) {
             <div className='main_content'>
                 <Routes>
                     <Route path='/profile/*' 
-                    element={<Profile 
-                                postsData={props.appState.profilePage.postsData} />} /> {/*Все необходимо поместить в тег BrowserRouter и Roures*/}
+                            element={<Profile 
+                            profilePage={props.appState.profilePage}
+                            dispatch={props.dispatch}
+                           
+                             
+                                
+                                />} /> {/*Все необходимо поместить в тег BrowserRouter и Roures*/}
                     <Route path='/dialogs/*' 
                     element={<Dialogs 
-                                dialogsData={props.appState.messagesPage.dialogsData} 
-                                messageData={props.appState.messagesPage.messageData} />} />
+                                dialogsPage={props.appState.dialogsPage} 
+                                dispatch={props.dispatch}
+                                 />} />
                     
                 </Routes>
                 
