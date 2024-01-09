@@ -1,7 +1,7 @@
 import React from "react";
 import Post from "./Post/Post";
 import style from './MyPosts.module.css'
-import { addPostActionCreator, updateNewPostTextActionCreator } from "../../../redux/profileReducer";
+
 
 
 
@@ -17,14 +17,14 @@ let postsElements = props.postsData.map ((obj) => {
 
 let newPostElement = React.createRef(); // создание ссылки на объект
 
-let addPost = () => {
-    props.dispatch(addPostActionCreator());
+let onAddPost = () => {
+    props.addPost();
    
 }
 
 let onPostChange = () => {
     let text = newPostElement.current.value;
-    props.dispatch(updateNewPostTextActionCreator(text)); //newPost это название переменной в state которая создается и изменяется
+    props.updateNewPostText(text); 
     
 }
 
@@ -38,7 +38,7 @@ let onPostChange = () => {
                 onChange={onPostChange} />
            </div>
            <div className={style.button_block}>
-            <button onClick={addPost}>Add post</button>
+            <button onClick={onAddPost}>Add post</button>
            </div>
             
             

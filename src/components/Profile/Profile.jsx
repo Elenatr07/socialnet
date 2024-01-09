@@ -1,6 +1,7 @@
 import React from "react";
-import MyPosts from "./MyPosts/MyPosts";
+
 import ProfileInfo from "./MyPosts/ProfileInfo";
+import MyPostsContainer from "./MyPosts/Post/MyPostsContainer";
 
 
 
@@ -9,10 +10,9 @@ function Profile (props) {
         <div >
         
        <ProfileInfo />
-        <MyPosts 
-        postsData={props.profilePage.postsData}
-        dispatch={props.dispatch}
-        newPostText={props.profilePage.newPostText}
+        <MyPostsContainer
+        store = {props.store}
+    
         
          />
        

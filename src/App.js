@@ -1,10 +1,10 @@
 
 import { BrowserRouter, Route, Routes } from 'react-router-dom';
 import './App.css';
-import Dialogs from './components/Dialogs/Dialogs';
 import Header from './components/Header';
 import Navbar from './components/Navbar/Navbar';
 import Profile from './components/Profile/Profile';
+import DialogsContainer from './components/Dialogs/DialogsContainer';
 
 
 
@@ -19,16 +19,14 @@ function App(props) {
                 <Routes>
                     <Route path='/profile/*' 
                             element={<Profile 
-                            profilePage={props.appState.profilePage}
-                            dispatch={props.dispatch}
+                            store={props.store}
                            
                              
                                 
                                 />} /> {/*Все необходимо поместить в тег BrowserRouter и Roures*/}
                     <Route path='/dialogs/*' 
-                    element={<Dialogs 
-                                dialogsPage={props.appState.dialogsPage} 
-                                dispatch={props.dispatch}
+                    element={<DialogsContainer 
+                               store={props.store}
                                  />} />
                     
                 </Routes>
