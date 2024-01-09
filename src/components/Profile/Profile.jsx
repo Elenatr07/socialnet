@@ -11,7 +11,7 @@ function Profile (props) {
         
        <ProfileInfo />
         <MyPostsContainer
-        store = {props.store}
+       // store = {props.store}
     
         
          />

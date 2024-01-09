@@ -19,14 +19,14 @@ function App(props) {
                 <Routes>
                     <Route path='/profile/*' 
                             element={<Profile 
-                            store={props.store}
+                           // store={props.store}
                            
                              
                                 
                                 />} /> {/*Все необходимо поместить в тег BrowserRouter и Roures*/}
                     <Route path='/dialogs/*' 
                     element={<DialogsContainer 
-                               store={props.store}
+                              // store={props.store}
                                  />} />
                     
                 </Routes>

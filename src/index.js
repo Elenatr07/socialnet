@@ -7,6 +7,7 @@ import './index.css';
 
 import App from './App';
 import { store } from './redux/reduxStore';
+import StoreContext from './StoreContext';
 
 
 //rerenderTree функция для перерендера страницы после измнения state
@@ -15,15 +16,18 @@ const root = ReactDOM.createRoot(document.getElementById('root'));
    
 root.render(
   <React.StrictMode>
-<App 
-    store={store.getState()} 
-    dispatch={store.dispatch.bind(store)}
-     />
+    <StoreContext.Provider value={store}>
+          <App 
+           //   store={store.getState()} 
+           //   dispatch={store.dispatch.bind(store)}
+              />
+    </StoreContext.Provider>
+
   </React.StrictMode>
 ); 
 }
 
-rerenderTree(store.getState());
+rerenderTree();
 store.subscribe(rerenderTree);
 /* альтернативный перерендер если не работает первый вариант
 store.subscribe(() => {
