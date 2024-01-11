@@ -18,8 +18,7 @@ export default function DialogsContainer() {
 
  return (
     <StoreContext.Consumer> 
-        { 
-        (store) => {
+        {(store) => {
             let onSendMessageClick =() => {
     store.dispatch(sendMessageCreator())
 }
@@ -30,9 +29,9 @@ let onMessageChange = (text) => {
     <Dialogs 
                     sendMessage = {onSendMessageClick}
                     updateNewMessageText={onMessageChange}
-                    dialogsData={store.store.getState().dialogsData}
-                    messageData={store.store.getState().messageData}
-                    newMessageText={store.store.getState().newMessageText}
+                    dialogsData={store.getState().dialogsPage.dialogsData}
+                    messageData={store.getState().dialogsPage.messageData}
+                    newMessageText={store.getState().dialogsPage.newMessageText}
                     />)
         }
     }

@@ -15,6 +15,7 @@ let postsElements = props.postsData.map ((obj) => {
     )
 })
 
+
 let newPostElement = React.createRef(); // создание ссылки на объект
 
 let onAddPost = () => {
