@@ -33,24 +33,46 @@ export const dialogsReducer = (state=initialState, action) => {
     }*/
 
     /* использование switch*/
-    switch(action.type) {
-        case SEND_MESSAGE:
+    let stateCopy = {...state};
+    switch(action.type) { 
+        
+        case SEND_MESSAGE: 
             let newMessege = {
                 id: 5,
                 message: state.newMessageText,
             };
-            state.messageData.push(newMessege);
-            state.newMessageText = '';   
-            return state;   //используем return взамен breake, если не использовать return или breake функция будет бесконечной
-        case UPDATE_NEW_MESSAGE_TEXT:
-            state.newMessageText = action.newMessege;
-            return state;
+            stateCopy.messageData = [...state.messageData]
+            stateCopy.messageData.push(newMessege);
+            stateCopy.newMessageText = '';   
+            return stateCopy; 
+            //используем return взамен breake, если не использовать return или breake функция будет бесконечной
+        case UPDATE_NEW_MESSAGE_TEXT: 
+           
+            stateCopy.newMessageText = action.newMessege;
+            return stateCopy;
+        
             default:
                 return state;
     }
 
     
 }
+/* можно улучшить код
+switch (action.type)
+case SEND_MESSAGE: 
+return {
+    ...state, //копирование state
+    newMessageText: '',
+    messageData: [...state.messageData, {id:5, message: state.newMessageText }], //копирование messageData и добавление нового сообщения
+},
+case UPDATE_NEW_MESSAGE_TEXT: 
+return {
+    ...state,
+    newMessageText: action.newMessege;
+
+}
+
+*/
 
 export const sendMessageCreator = () => {
     return {

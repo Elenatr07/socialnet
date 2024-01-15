@@ -1,42 +1,47 @@
 import React from 'react'
 
-
-
 import { sendMessageCreator, updateNewMessageTextCreator } from '../../redux/dialogsReducer'
 import Dialogs from './Dialogs'
-import StoreContext from '../../StoreContext'
+import { connect } from 'react-redux'
 
 
 
-
-
-
-
-
-export default function DialogsContainer() {
-
-
- return (
-    <StoreContext.Consumer> 
-        {(store) => {
-            let onSendMessageClick =() => {
-    store.dispatch(sendMessageCreator())
+/*
+данные из state
+let f1 = (state) =>{
+return {
+    dialogsData:state.dialogsPage.dialogsData
 }
-let onMessageChange = (text) => {
-    store.dispatch(updateNewMessageTextCreator(text))
 }
-        return (
-    <Dialogs 
-                    sendMessage = {onSendMessageClick}
-                    updateNewMessageText={onMessageChange}
-                    dialogsData={store.getState().dialogsPage.dialogsData}
-                    messageData={store.getState().dialogsPage.messageData}
-                    newMessageText={store.getState().dialogsPage.newMessageText}
-                    />)
+collback-функции
+let f2 =(dispatch)=> {
+    return {
+
+    }
+}
+ 
+    const Connect = connect (f1, f2) (Dialogs) создает компаненту Dialogs и передает в нее в качестве props f1, f1*/
+
+
+    let mapStateToProps = (state) => {
+        return {
+            dialogsData: state.dialogsPage.dialogsData,
+            messageData: state.dialogsPage.messageData,
+            newMessageText: state.dialogsPage.newMessageText
+
         }
     }
+    let mapDispatchToProps = (dispatch) => {
+        return {
+            sendMessage: () => {
+                dispatch(sendMessageCreator())
+            },
+            updateNewMessageText: (text)=> {
+                dispatch(updateNewMessageTextCreator(text))
+            }
 
-    </StoreContext.Consumer>
-      
-  )
-}
+        }
+    }
+ const DialogsContainer = connect (mapStateToProps, mapDispatchToProps ) (Dialogs) 
+
+ export default DialogsContainer;

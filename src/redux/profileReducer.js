@@ -27,21 +27,27 @@ export const profileReducer = (state = initialState, action) => {
     return state;
     */
    switch(action.type) {
-    case ADD_POST:
+    case ADD_POST: {
         let newPost = {
             id: 3,
             post: state.newPostText,
             likesCount: 17
         };
-        state.postsData.push(newPost);
-        state.newPostText = '';
-        return state;
-    case UPDATE_NEW_POST_TEXT:
-        state.newPostText = action.newPost;
-        return state;
+        let stateCopy = {...state} // создаем копию state, можно сделать глобально и вынести за пределы switch
+        stateCopy.postsData = [...state.postsData]; //создаем копию вложенного state.postsData
+        stateCopy.postsData.push(newPost);
+        stateCopy.newPostText = '';
+        return stateCopy;
+    }
+    case UPDATE_NEW_POST_TEXT: {
+        let stateCopy ={...state}
+        stateCopy.newPostText = action.newPost;
+        return stateCopy;
+    }
         default:
             return state;
    }
+   
 }
 
 export const addPostActionCreator = () => {
