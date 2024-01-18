@@ -20,6 +20,9 @@ function Navbar() {
         <div>
             <NavLink className={navData => navData.isActive ? style.active : style.nav_link} to='/settings'>Settings</NavLink>  
         </div>
+        <div>
+            <NavLink className={navData => navData.isActive ? style.active : style.nav_link} to='/users'>Users</NavLink>
+        </div>
       
     </nav>
     )

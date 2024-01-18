@@ -1,3 +1,37 @@
 .user_avatar {
     width: 50px;
+    margin-top: 10px;
+}
+
+.user_block {
+   display: flex;
+
+}
+.avatar_block {
+    width: 100px;
+    text-align: center;
+}
+button {
+    margin-top: 5px;
+    margin-bottom: 10px;
+}
+.userName_block {
+    width: 80%;
+}
+.userFullName {
+    margin-top: 25px;
+    margin-left: 15px;
+    font-size: 24px;
+}
+.userStatus {
+    margin-left: 15px;
+    margin-top: 10px;
+    font-style: italic;
+}
+.userCountry {
+    margin-top: 25px;
+ 
+}
+.select_page {
+    font-weight: bold;
 }

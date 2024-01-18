@@ -1,10 +1,15 @@
 const FOLLOW = 'FOLLOW';
 const UNFOLLOW = 'UNFOLLOW';
 const SET_USERS = 'SET_USERS';
+const SET_CORRENT_PAGE = 'SET_CORRENT_PAGE';
+const SET_TOTAL_USERS_COUNT = 'SET_TOTAL_USERS_COUNT'
 
 
 let initialState = {
     users: [],
+    pageSize: 10, //количество выводимых страниц
+    totalUsersCount: 0,
+    currentPage: 1
 
 }
 export const usersReducer = (state=initialState, action) => {
@@ -33,7 +38,17 @@ export const usersReducer = (state=initialState, action) => {
         case SET_USERS:
             return {
                 ...state,
-                users: [...state.users, ...action.users]
+                users: action.users
+            }
+        case SET_CORRENT_PAGE:
+            return {
+                ...state,
+                currentPage: action.currentPage
+            }
+        case SET_TOTAL_USERS_COUNT:
+            return {
+                ...state,
+                totalUsersCount: action.count
             }
         default: 
         return state;
@@ -54,5 +69,16 @@ export const unfollowActionCreator = (userId) => {
 export const setUsersCreator = (users) => { //добавление users в state  приходящие с сервера
     return {
         type: SET_USERS, users
+    }
+}
+export const setCurrentPageCreator = (currentPage) => {
+    return {
+        type: SET_CORRENT_PAGE, currentPage
+    }
+}
+
+export const setTotalUsersCountCreator = (totalUsersCount) => {
+    return {
+        type: SET_TOTAL_USERS_COUNT, count: totalUsersCount
     }
 }
