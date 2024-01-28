@@ -1,5 +1,7 @@
 import React from "react";
 import style from './Users.module.css';
+import { NavLink } from "react-router-dom";
+import axios from "axios";
 
 
 
@@ -38,9 +40,37 @@ const UsersClass = (props) => {
                   <div key={user.id}>
                     <div className={style.user_block}>
                       <div className={style.avatar_block}>
-                        <img className={style.user_avatar} src={user.photos.small !== null ? user.photos.small :url } alt='' />
+                        <NavLink to={'/profile/' + user.id} >
+                          <img className={style.user_avatar} src={user.photos.small !== null ? user.photos.small :url } alt='' /> 
+                        </NavLink>
+                        
                         <div className={style.button_follow}>
-                          {user.followed ? <button onClick={()=> {props.unfollow(user.id)}}>unfollow</button> : <button onClick={()=> {props.follow(user.id)}}>follow</button>}
+                          {user.followed ?
+                           <button onClick={()=> {
+                            axios.delete(`https://social-network.samuraijs.com/api/1.0/follow/${user.id}`,
+                             {withCredentials:true,
+                            //headers: {"API-KEY: "0d1f131a-af70-4463-84c0-a73c20105bab"}
+                          })
+                            .then(res => {
+                              if (res.data.resultCode ===0) {
+                                 props.unfollow(user.id)
+                              }
+                            })
+                            }}>unfollow</button> :
+                           <button onClick={()=> {
+                           
+                            axios.post(`https://social-network.samuraijs.com/api/1.0/follow/${user.id}`, {}, 
+                            {withCredentials:true
+                            //headers: {"API-KEY: "0d1f131a-af70-4463-84c0-a73c20105bab"}
+                            })
+                                .then(res => {
+                                   //resultCoвe это инфа с сервера о том что авторизация состоялась, название и код зависит от настроек сервера
+                                if(res.data.resultCode ===0) {
+                                    props.follow(user.id)
+                                }
+                                  });
+                           
+                           }}>follow</button>}
                           
                         </div>
                      

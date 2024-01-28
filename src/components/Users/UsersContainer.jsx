@@ -2,29 +2,39 @@ import React from "react";
 import { connect } from "react-redux";
 import axios from "axios";
 
-import { followActionCreator, setCurrentPageCreator, setTotalUsersCount, setTotalUsersCountCreator, setUsersCreator, unfollowActionCreator } from "../../redux/usersReducer";
+import { followActionCreator, setCurrentPageCreator, setIsFetchingCreator, setTotalUsersCount, setTotalUsersCountCreator, setUsersCreator, unfollowActionCreator } from "../../redux/usersReducer";
 import UsersClass from "./UsersClass";
+import Preloader from "../Preloader/Preloader";
+import { getUsers } from "../../api/api";
+
 
 class UsersAPIComponent extends React.Component {
   
      componentDidMount () {
-      axios.get(`https://social-network.samuraijs.com/api/1.0/users?page=${this.props.currentPag}&count=${this.props.pageSize}`)
-         .then(res => {
-             this.props.setUsers(res.data.items)
-             this.props.setTotalUsersCount(res.data.totalCount)
+        this.props.toggleIsFetching(true)
+
+        getUsers(this.props.currentPage, this.props.pageSize).then(data => { //data приходит из res в api.js
+            this.props.toggleIsFetching(false)
+             this.props.setUsers(data.items)
+             this.props.setTotalUsersCount(data.totalCount)
            });
     }
     onPageChanged = (pageNumber) => {
      this.props.setCurrentPage(pageNumber);
-     axios.get(`https://social-network.samuraijs.com/api/1.0/users?page=${pageNumber}&count=${this.props.pageSize}`)
-     .then(res => {
-         this.props.setUsers(res.data.items)
+     this.props.toggleIsFetching(true)
+     getUsers(pageNumber, this.props.pageSize).then(data => {
+        this.props.toggleIsFetching(false)
+         this.props.setUsers(data.items)
        });
     }
       
      render() {
-      
-       return <UsersClass 
+        return <>
+        {this.props.isFetching ?
+        
+            <Preloader /> : 
+
+        <UsersClass 
        onPageChanged={this.onPageChanged} 
        totalUsersCount = {this.props.totalUsersCount}
        pageSize = {this.props.pageSize}
@@ -32,8 +42,12 @@ class UsersAPIComponent extends React.Component {
        users = {this.props.users}
        unfollow = {this.props.unfollow}
        follow = {this.props.follow}
+       
  
-       /> 
+       />
+       }
+       </>
+       
        
      }
  }
@@ -43,10 +57,12 @@ let mapStateToProps = (state) => {
         users: state.usersPage.users,
         pageSize: state.usersPage.pageSize,
         totalUsersCount: state.usersPage.totalUsersCount,
-        currentPage: state.usersPage.currentPage
+        currentPage: state.usersPage.currentPage,
+        isFetching: state.usersPage.isFetching
     }
 }
 
+{/* если убрать mapDispatchToProps и поместить его сразу в connect
 let mapDispatchToProps= (dispatch) => {
     return {
         follow: (userId) => {
@@ -63,10 +79,21 @@ let mapDispatchToProps= (dispatch) => {
         },
         setTotalUsersCount: (totalCount) => {
             dispatch(setTotalUsersCountCreator(totalCount))
+        },
+        toggleIsFetching: (isFetching) => {
+            dispatch(setIsFetchingCreator(isFetching))
         }
     }
 }
 
-const UsersContainer = connect (mapStateToProps, mapDispatchToProps) (UsersAPIComponent);
+const UsersContainer = connect (mapStateToProps, mapDispatchToProps) (UsersAPIComponent);*/}
 
+const UsersContainer = connect(mapStateToProps, {
+    follow: followActionCreator,
+    unfollow: unfollowActionCreator,
+    setUsers: setUsersCreator,
+    setCurrentPage: setCurrentPageCreator,
+    setTotalUsersCount: setTotalUsersCountCreator,
+    toggleIsFetching: setIsFetchingCreator
+}) (UsersAPIComponent);
 export default UsersContainer;
