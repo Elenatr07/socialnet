@@ -2,7 +2,7 @@ import React from "react";
 import { connect } from "react-redux";
 import axios from "axios";
 
-import { followActionCreator, setCurrentPageCreator, setIsFetchingCreator, setTotalUsersCount, setTotalUsersCountCreator, setUsersCreator, unfollowActionCreator } from "../../redux/usersReducer";
+import { followActionCreator, setCurrentPageCreator, setIsFetchingCreator, setIsFollowingProgressCreator, setTotalUsersCount, setTotalUsersCountCreator, setUsersCreator, unfollowActionCreator } from "../../redux/usersReducer";
 import UsersClass from "./UsersClass";
 import Preloader from "../Preloader/Preloader";
 import { getUsers } from "../../api/api";
@@ -42,6 +42,8 @@ class UsersAPIComponent extends React.Component {
        users = {this.props.users}
        unfollow = {this.props.unfollow}
        follow = {this.props.follow}
+       followingInProgress  = {this.props.followingInProgress}
+       toggleFollowingInProgress={this.props.toggleFollowingInProgress}
        
  
        />
@@ -58,7 +60,9 @@ let mapStateToProps = (state) => {
         pageSize: state.usersPage.pageSize,
         totalUsersCount: state.usersPage.totalUsersCount,
         currentPage: state.usersPage.currentPage,
-        isFetching: state.usersPage.isFetching
+        isFetching: state.usersPage.isFetching,
+        followingInProgress: state.usersPage.followingInProgress
+       
     }
 }
 
@@ -94,6 +98,7 @@ const UsersContainer = connect(mapStateToProps, {
     setUsers: setUsersCreator,
     setCurrentPage: setCurrentPageCreator,
     setTotalUsersCount: setTotalUsersCountCreator,
-    toggleIsFetching: setIsFetchingCreator
+    toggleIsFetching: setIsFetchingCreator,
+    toggleFollowingInProgress: setIsFollowingProgressCreator,
 }) (UsersAPIComponent);
 export default UsersContainer;
