@@ -1,3 +1,6 @@
+import { getUsers } from "../api/api";
+import { usersAPI } from './../api/api';
+
 const FOLLOW = 'FOLLOW';
 const UNFOLLOW = 'UNFOLLOW';
 const SET_USERS = 'SET_USERS';
@@ -109,5 +112,48 @@ export const setIsFetchingCreator = (isFetching) => {
 export const setIsFollowingProgressCreator = (isFollowingInProgress, userId) => {
     return {
         type: TOGGLE_IS_FOLLOWING_PROGRESS, isFollowingInProgress, userId
+    }
+}
+
+//Thunk
+
+export const getUsersThunkCreator = (currentPage, pageSize )  => {
+  return  (dispatch) => {
+   dispatch (setIsFetchingCreator(true));
+
+    usersAPI.getUsers(currentPage, pageSize).then(data => { //data приходит из res в api.js
+       dispatch (setCurrentPageCreator(currentPage))
+       dispatch (setIsFetchingCreator(false));
+       dispatch (setUsersCreator(data.items));
+       dispatch(setTotalUsersCountCreator(data.totalCount))
+       });
+}
+}
+
+export const followThunk = (userId) => {
+    return (dispatch) => {
+       dispatch (setIsFollowingProgressCreator(true, userId))
+        usersAPI.follow(userId)
+            .then(res => {
+         //resultCode это инфа с сервера о том что авторизация состоялась, название и код зависит от настроек сервера
+            if(res.data.resultCode ===0) {
+            dispatch (followActionCreator(userId))
+            }
+            dispatch (setIsFollowingProgressCreator(false, userId))
+            });
+    }
+}
+
+export const unFollowThunk = (userId) => {
+    return (dispatch) => {
+       dispatch (setIsFollowingProgressCreator(true, userId))
+        usersAPI.unfollow(userId)
+            .then(res => {
+         //resultCode это инфа с сервера о том что авторизация состоялась, название и код зависит от настроек сервера
+            if(res.data.resultCode ===0) {
+            dispatch (unfollowActionCreator(userId))
+            }
+            dispatch (setIsFollowingProgressCreator(false, userId))
+            });
     }
 }
