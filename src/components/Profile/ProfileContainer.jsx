@@ -3,7 +3,7 @@ import axios from "axios";
 
 import Profile from "./Profile";
 import { connect } from "react-redux";
-import { getUserProfileThunk, setUserProfileCreator } from "../../redux/profileReducer";
+import { getUserProfileThunk, getUserStatusThunk, setUserProfileCreator, updateUserStatusThunk } from "../../redux/profileReducer";
 import { Navigate, useLocation, useNavigate, useParams } from "react-router-dom";
 import { usersAPI } from "../../api/api";
 import { withAuthRedirect } from "../../hoc/withAuthRedirect";
@@ -30,15 +30,16 @@ function withRouter(Component) {
 class ProfileContainer extends React.Component  {
     
     componentDidMount() {
-      //  debugger;
+     // debugger;
         let profileId = this.props.router.params.userId; //userId это название роута из App.js
         if (!profileId) {
             profileId = 30648
         }
         this.props.getUserProfileThunk(profileId)
+        this.props.getUserStatusThunk(profileId)
       /* перенос в profileReduser
-       usersAPI.getProfile(profileId)
-            (перенос в api и замена на usersAPU.getProfile)
+       profileAPI.getProfile(profileId)
+            (перенос в api и замена на profileAPI.getProfile)
             axios.get(`https://social-network.samuraijs.com/api/1.0/profile/${profileId}`) 
         .then(res => {
             this.props.setUserProfile(res.data)
@@ -54,6 +55,8 @@ class ProfileContainer extends React.Component  {
             <Profile 
                 {...this.props} 
                 profile={this.props.profile} 
+                status = {this.props.status}
+                updateStatus= {this.props.updateStatus}
             
             
             /> 
@@ -83,6 +86,7 @@ class ProfileContainer extends React.Component  {
     let mapStateToProps = (state) => ({
         profile: state.profilePage.profile,
       //  isAuth: state.auth.isAuth
+      status: state.profilePage.status
        
     })
 
@@ -94,7 +98,11 @@ class ProfileContainer extends React.Component  {
 
 export default  compose(connect (mapStateToProps, {
    // setUserProfile: setUserProfileCreator ,
-    getUserProfileThunk: getUserProfileThunk
+    getUserProfileThunk: getUserProfileThunk,
+    getUserStatusThunk: getUserStatusThunk,
+    updateStatus: updateUserStatusThunk
+
+
 }),
     withRouter,
     withAuthRedirect

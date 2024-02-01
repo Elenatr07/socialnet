@@ -15,7 +15,7 @@ export default function ProfileInfo(props) {
       </div>
       
       
-    <ProfileStatus status={"Hello my name is Elena"}/>
+    <ProfileStatus status={props.status} updateStatus={props.updateStatus}/>
     <div className={style.ava}>
     <img className={style.content_logo} src={props.profile.photos.small} alt=''></img>
 

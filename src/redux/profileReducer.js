@@ -1,8 +1,9 @@
-import { usersAPI } from "../api/api";
+import { profileAPI, usersAPI } from "../api/api";
 
 const ADD_POST = 'ADD_POST';
 const UPDATE_NEW_POST_TEXT = 'UPDATE_NEW_POST_TEXT';
-const SET_USER_PROFILE = 'SET_USER_PROFILE'
+const SET_USER_PROFILE = 'SET_USER_PROFILE';
+const SET_STATUS = 'SET_STATUS'
 
 let initialState = {
     postsData: [
@@ -10,7 +11,8 @@ let initialState = {
         {id: 2, post: 'Hello', likesCount: 8}
       ],
     newPostText: 'same text',
-    profile: null
+    profile: null,
+    status: ""
 }
 
 
@@ -55,6 +57,12 @@ export const profileReducer = (state = initialState, action) => {
         }
 
     }
+    case SET_STATUS: {
+        return {
+            ...state,
+            status: action.status
+        }
+    }
         default:
             return state;
    }
@@ -79,12 +87,37 @@ export const setUserProfileCreator = (profile) => {
     }
 }
 
+export const setUserStatusCreator = (status) => {
+    return {
+        type: SET_STATUS, status
+    }
+}
+
 //thunk
 
 export const getUserProfileThunk = (profileId) => (dispatch) => {
-    usersAPI.getProfile(profileId)
+    profileAPI.getProfile(profileId)
        .then(res => {
           dispatch (setUserProfileCreator(res.data))
+         
+        });
+}
+
+export const getUserStatusThunk = (profileId) => (dispatch) => {
+    profileAPI.getStatus(profileId)
+       .then(res => {
+          dispatch (setUserStatusCreator(res.data))
+         
+        });
+}
+
+export const updateUserStatusThunk = (status) => (dispatch) => {
+    profileAPI.updateStatus(status)
+       .then(res => {
+        if (res.data.resultCode === 0) { //resultCode ===0 это требование зависит от того что backend считает полодительным ответом
+           dispatch (setUserStatusCreator(status)) 
+        }
+          
          
         });
 }
