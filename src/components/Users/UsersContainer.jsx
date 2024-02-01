@@ -6,6 +6,9 @@ import { followActionCreator, followThunk, getUsersThunkCreator, setCurrentPageC
 import UsersClass from "./UsersClass";
 import Preloader from "../Preloader/Preloader";
 import { usersAPI } from "../../api/api";
+import { withAuthRedirect } from "../../hoc/withAuthRedirect";
+
+import { compose } from "redux";
 
 
 class UsersAPIComponent extends React.Component {
@@ -75,7 +78,7 @@ let mapStateToProps = (state) => {
     }
 }
 
-{/* если убрать mapDispatchToProps и поместить его сразу в connect
+/* если убрать mapDispatchToProps и поместить его сразу в connect
 let mapDispatchToProps= (dispatch) => {
     return {
         follow: (userId) => {
@@ -99,9 +102,15 @@ let mapDispatchToProps= (dispatch) => {
     }
 }
 
-const UsersContainer = connect (mapStateToProps, mapDispatchToProps) (UsersAPIComponent);*/}
+const UsersContainer = connect (mapStateToProps, mapDispatchToProps) (UsersAPIComponent);*/
 
-const UsersContainer = connect(mapStateToProps, {
+//hoc перенос в compose
+//let withRedirect = withAuthRedirect(UsersAPIComponent)
+/*чтобы убрать redirect на /login надо закоментировать withRedirect и 
+компоненту UsersAPIComponent перенести в UsersContainer взамен withRedirect
+*/
+//перенос в compose
+/*const UsersContainer = connect(mapStateToProps, {
     follow: followActionCreator,
     unfollow: unfollowActionCreator,
     setUsers: setUsersCreator,
@@ -112,5 +121,25 @@ const UsersContainer = connect(mapStateToProps, {
     getUsersThunk: getUsersThunkCreator,
     followThunk: followThunk,
     unFollowThunk: unFollowThunk
-}) (UsersAPIComponent);
+}) (withRedirect);*/
+
+//в compose чтобы убрать redirect на  /login надо закоментировать withAuthRedirect
+
+const UsersContainer = compose(
+    withAuthRedirect,
+    connect(mapStateToProps, {
+    follow: followActionCreator,
+    unfollow: unfollowActionCreator,
+    setUsers: setUsersCreator,
+    setCurrentPage: setCurrentPageCreator,
+    setTotalUsersCount: setTotalUsersCountCreator,
+    toggleIsFetching: setIsFetchingCreator,
+    toggleFollowingInProgress: setIsFollowingProgressCreator,
+    getUsersThunk: getUsersThunkCreator,
+    followThunk: followThunk,
+    unFollowThunk: unFollowThunk}))(UsersAPIComponent)
+    
 export default UsersContainer;
+
+
+

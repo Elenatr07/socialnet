@@ -15,17 +15,30 @@ export const usersAPI = {
        follow(userId) {
         return axios.post(`https://social-network.samuraijs.com/api/1.0/follow/${userId}`, {}, 
         {withCredentials:true
-        //headers: {"API-KEY: "0d1f131a-af70-4463-84c0-a73c20105bab"}
+        //headers: {"API-KEY": "0d1f131a-af70-4463-84c0-a73c20105bab"}
         })
       },
       unfollow(userId)  {
         return axios.delete(`https://social-network.samuraijs.com/api/1.0/follow/${userId}`,
         {withCredentials:true,
-       //headers: {"API-KEY: "0d1f131a-af70-4463-84c0-a73c20105bab"}
+       //headers: {"API-KEY": "0d1f131a-af70-4463-84c0-a73c20105bab"}
      })
+      },
+      getProfile(profileId) {
+       return  axios.get(`https://social-network.samuraijs.com/api/1.0/profile/${profileId}`)
+   
       }
 } 
 
+export const authAPI = {
+  meAuth () {
+    return  axios.get(`https://social-network.samuraijs.com/api/1.0/auth/me`,
+     {withCredentials:true,
+      headers: {"API-KEY": "0d1f131a-af70-4463-84c0-a73c20105bab"}
+    })
+     
+  }
+}
      
 
 

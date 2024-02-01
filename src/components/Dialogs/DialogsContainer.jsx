@@ -3,31 +3,27 @@ import React from 'react'
 import { sendMessageCreator, updateNewMessageTextCreator } from '../../redux/dialogsReducer'
 import Dialogs from './Dialogs'
 import { connect } from 'react-redux'
+import { Navigate } from 'react-router-dom'
+import { withAuthRedirect } from '../../hoc/withAuthRedirect'
+import { compose } from 'redux'
 
 
 
-/*
-данные из state
-let f1 = (state) =>{
-return {
-    dialogsData:state.dialogsPage.dialogsData
-}
-}
-collback-функции
-let f2 =(dispatch)=> {
-    return {
 
-    }
-}
- 
-    const Connect = connect (f1, f2) (Dialogs) создает компаненту Dialogs и передает в нее в качестве props f1, f1*/
-
+//hoc
+  //  let AuthRedirectComponent = withAuthRedirect(Dialogs) //передано в compose
+   /* аналогично let AuthRedirectComponent =
+    (props) => {
+        if (!props.isAuth) return <Navigate to="/login"></Navigate>
+        return <Dialogs {...props}/>
+    }*/
 
     let mapStateToProps = (state) => {
         return {
             dialogsData: state.dialogsPage.dialogsData,
             messageData: state.dialogsPage.messageData,
-            newMessageText: state.dialogsPage.newMessageText
+            newMessageText: state.dialogsPage.newMessageText,
+           // isAuth: state.auth.isAuth
 
         }
     }
@@ -42,6 +38,9 @@ let f2 =(dispatch)=> {
 
         }
     }
- const DialogsContainer = connect (mapStateToProps, mapDispatchToProps ) (Dialogs) 
+ //const DialogsContainer = connect (mapStateToProps, mapDispatchToProps ) (AuthRedirectComponent) 
+ //передано в compose
 
- export default DialogsContainer;
+ export default compose(
+    connect(mapStateToProps, mapDispatchToProps),
+    withAuthRedirect)(Dialogs)

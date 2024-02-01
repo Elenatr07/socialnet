@@ -3,8 +3,11 @@ import axios from "axios";
 
 import Profile from "./Profile";
 import { connect } from "react-redux";
-import { setUserProfileCreator } from "../../redux/profileReducer";
-import { useLocation, useNavigate, useParams } from "react-router-dom";
+import { getUserProfileThunk, setUserProfileCreator } from "../../redux/profileReducer";
+import { Navigate, useLocation, useNavigate, useParams } from "react-router-dom";
+import { usersAPI } from "../../api/api";
+import { withAuthRedirect } from "../../hoc/withAuthRedirect";
+import { compose } from "redux";
 
 //withRouter чтобы прокидывать url адрес пользователя в profile
 function withRouter(Component) {
@@ -32,14 +35,19 @@ class ProfileContainer extends React.Component  {
         if (!profileId) {
             profileId = 30648
         }
-        axios.get(`https://social-network.samuraijs.com/api/1.0/profile/${profileId}`)
+        this.props.getUserProfileThunk(profileId)
+      /* перенос в profileReduser
+       usersAPI.getProfile(profileId)
+            (перенос в api и замена на usersAPU.getProfile)
+            axios.get(`https://social-network.samuraijs.com/api/1.0/profile/${profileId}`) 
         .then(res => {
             this.props.setUserProfile(res.data)
            
-          });
+          });*/
     }
 
     render() {
+        
         return (
                 <div >
                 
@@ -57,13 +65,37 @@ class ProfileContainer extends React.Component  {
             )
         }
     }
+
+  
+
+    //hoc перенос в compose
+    //let AuthRedirectComponent = withAuthRedirect(ProfileContainer)
     
+   /*запись аналогична let AuthRedirectComponent =  (props) => {
+        if (!props.isAuth) return <Navigate to="/login"></Navigate>
+        return <ProfileContainer {...props}/>
+    }*/
+    
+  
+
+
 
     let mapStateToProps = (state) => ({
-        profile: state.profilePage.profile
+        profile: state.profilePage.profile,
+      //  isAuth: state.auth.isAuth
+       
     })
 
-
-export default connect (mapStateToProps, {
+// перенос в compose
+/*export default connect (mapStateToProps, {
     setUserProfile: setUserProfileCreator ,
-}) (withRouter(ProfileContainer))
+    getUserProfileThunk: getUserProfileThunk
+}) (withRouter(AuthRedirectComponent))*/
+
+export default  compose(connect (mapStateToProps, {
+   // setUserProfile: setUserProfileCreator ,
+    getUserProfileThunk: getUserProfileThunk
+}),
+    withRouter,
+    withAuthRedirect
+ )(ProfileContainer)

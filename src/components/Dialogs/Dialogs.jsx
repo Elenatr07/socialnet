@@ -3,6 +3,7 @@ import style from "./Dialogs.module.css"
 
 import Dialog from './Dialog/Dialog'
 import Message from './Message/Message'
+import { Navigate } from 'react-router-dom'
 
 
 
@@ -37,6 +38,9 @@ let onMessageChange = (e) => {
     props.updateNewMessageText(text)
 }
 
+//alert (props.isAuth)
+//перенесено в AuthRedirectComponent в DialogsContainer
+//if (props.isAuth === false) return <Navigate to="/login"></ >
   return (
     <div className={style.dialogs}> 
         <div className={style.dialog_items}>
