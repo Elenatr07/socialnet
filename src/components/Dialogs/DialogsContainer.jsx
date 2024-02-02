@@ -1,6 +1,6 @@
 import React from 'react'
 
-import { sendMessageCreator, updateNewMessageTextCreator } from '../../redux/dialogsReducer'
+import { sendMessageCreator } from '../../redux/dialogsReducer'
 import Dialogs from './Dialogs'
 import { connect } from 'react-redux'
 import { Navigate } from 'react-router-dom'
@@ -29,12 +29,10 @@ import { compose } from 'redux'
     }
     let mapDispatchToProps = (dispatch) => {
         return {
-            sendMessage: () => {
-                dispatch(sendMessageCreator())
+            sendMessage: (newMessageText) => { //newMessageTaet это название name из Fielg в Dialogs
+                dispatch(sendMessageCreator(newMessageText))
             },
-            updateNewMessageText: (text)=> {
-                dispatch(updateNewMessageTextCreator(text))
-            }
+           
 
         }
     }

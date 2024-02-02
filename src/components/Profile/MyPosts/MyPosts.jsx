@@ -1,6 +1,7 @@
 import React from "react";
 import Post from "./Post/Post";
 import style from './MyPosts.module.css'
+import {Field, reduxForm} from "redux-form"
 
 
 
@@ -16,31 +17,20 @@ let postsElements = props.postsData.map ((obj) => {
 })
 
 
-let newPostElement = React.createRef(); // создание ссылки на объект
 
-let onAddPost = () => {
-    props.addPost();
+
+let onAddPost = (values) => {
+    props.addPost(values.newPostText);//newPostText название name из Field
    
 }
 
-let onPostChange = () => {
-    let text = newPostElement.current.value;
-    props.updateNewPostText(text); 
-    
-}
+
 
     return (
         <div>
            <h2 className={style.title}>My posts</h2> 
-           <div>
-            <textarea 
-                ref={newPostElement} 
-                value={props.newPostText} 
-                onChange={onPostChange} />
-           </div>
-           <div className={style.button_block}>
-            <button onClick={onAddPost}>Add post</button>
-           </div>
+           
+           <AddPostFormRedux onSubmit={onAddPost}/>
             
             
             <div className={style.new_posts}>New posts</div>
@@ -50,4 +40,17 @@ let onPostChange = () => {
     )
 }
 
+const addPostForm = (props) => {
+    return (
+            <form onSubmit={props.handleSubmit}>
+                <Field component="textarea" name="newPostText" />
+                 
+               
+                <div className={style.button_block}>
+                    <button >Add post</button>
+                </div>
+           </form>
+    )
+}
+const AddPostFormRedux = reduxForm({form: 'myPostsAddForm'})(addPostForm)
 export default MyPosts;

@@ -1,5 +1,4 @@
 
-const UPDATE_NEW_MESSAGE_TEXT = 'UPDATE_NEW_MESSAGE_TEXT'; 
 const SEND_MESSAGE = 'SEND_MESSAGE';
 
 let initialState = {
@@ -15,7 +14,7 @@ let initialState = {
         {id: 3, name: 'Sam'},
         {id: 4, name: 'Mikhale'}
     ],
-        newMessageText: '',
+        
 }
 export const dialogsReducer = (state=initialState, action) => {
  /* использование if else
@@ -39,17 +38,13 @@ export const dialogsReducer = (state=initialState, action) => {
         case SEND_MESSAGE: 
             let newMessege = {
                 id: 5,
-                message: state.newMessageText,
+                message: action.newMessageText,
             };
             stateCopy.messageData = [...state.messageData]
             stateCopy.messageData.push(newMessege);
-            stateCopy.newMessageText = '';   
             return stateCopy; 
             //используем return взамен breake, если не использовать return или breake функция будет бесконечной
-        case UPDATE_NEW_MESSAGE_TEXT: 
-           
-            stateCopy.newMessageText = action.newMessege;
-            return stateCopy;
+        
         
             default:
                 return state;
@@ -74,14 +69,10 @@ return {
 
 */
 
-export const sendMessageCreator = () => {
+export const sendMessageCreator = (newMessageText) => { //newMessageTaet это название name из Fielg в Dialogs
     return {
-        type: SEND_MESSAGE
+        type: SEND_MESSAGE, newMessageText
     }
 }
 
-export const updateNewMessageTextCreator = (text) => {
-    return {
-        type: UPDATE_NEW_MESSAGE_TEXT, newMessege: text
-    }
-}
+

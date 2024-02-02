@@ -4,6 +4,7 @@ import style from "./Dialogs.module.css"
 import Dialog from './Dialog/Dialog'
 import Message from './Message/Message'
 import { Navigate } from 'react-router-dom'
+import {Field, reduxForm} from "redux-form"
 
 
 
@@ -30,12 +31,12 @@ let messagesElemants = props.messageData.map((obj) => {
     )
 })
 
-let onSendMessageClick =() => {
-    props.sendMessage()
-}
-let onMessageChange = (e) => {
-    let text = e.target.value
-    props.updateNewMessageText(text)
+
+
+
+let addNewMessege = (values) => {
+  //  alert(values.newMessageText) //указывается значение name из Field
+   props.sendMessage(values.newMessageText)
 }
 
 //alert (props.isAuth)
@@ -50,21 +51,28 @@ let onMessageChange = (e) => {
          
 
         </div>
-    <div className={style.messages}> 
-        <div>{messagesElemants}</div>
-        <div>
-            <div className={style.block_textarea}>
-                <textarea 
-                placeholder='Enter your message'
-                value={props.newMessageText}
-                onChange={onMessageChange}
-                ></textarea></div>
-            <div className={style.button_block}>
-                <button className={style.send_message} onClick={onSendMessageClick}>Send</button>
-            </div>
+        <div className={style.messages}> 
+            <div>{messagesElemants}</div>
+           <AddMessageFormRedux onSubmit={addNewMessege} />
         </div>
-        </div>
-    
+        
     </div>
   )
 }
+
+const AddMessageForm = (props) => {
+    return (
+        <form onSubmit={props.handleSubmit}>
+        <div className={style.block_textarea}>
+            <Field component="textarea" name="newMessageText"  placeholder='Enter your message'/>
+      
+        </div>
+        <div className={style.button_block}>
+            <button className={style.send_message} >Send</button>
+        </div>
+    </form>
+    )
+}
+
+const AddMessageFormRedux =  reduxForm({form: 'dialogAddMessageForm' }) (AddMessageForm)
+
