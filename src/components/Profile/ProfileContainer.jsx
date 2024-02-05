@@ -33,7 +33,7 @@ class ProfileContainer extends React.Component  {
      // debugger;
         let profileId = this.props.router.params.userId; //userId это название роута из App.js
         if (!profileId) {
-            profileId = 30648
+            profileId = this.props.authorezedUserId
         }
         this.props.getUserProfileThunk(profileId)
         this.props.getUserStatusThunk(profileId)
@@ -86,7 +86,9 @@ class ProfileContainer extends React.Component  {
     let mapStateToProps = (state) => ({
         profile: state.profilePage.profile,
       //  isAuth: state.auth.isAuth
-      status: state.profilePage.status
+      status: state.profilePage.status,
+      authorezedUserId: state.auth.id,
+      isAuth: state.auth.isAuth
        
     })
 

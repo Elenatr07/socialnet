@@ -54,11 +54,18 @@ export const authAPI = {
       headers: {"API-KEY": "0d1f131a-af70-4463-84c0-a73c20105bab"}
     })
      
-  }
+  },
+  //email, password, rememberMe, captcha требования с backend при отправлении post запроса
+  login(email, password, rememberMe=false) {
+    return  axios.post(`https://social-network.samuraijs.com/api/1.0/auth/login`, {email, password, rememberMe},
+    {withCredentials:true,
+     headers: {"API-KEY": "0d1f131a-af70-4463-84c0-a73c20105bab"}
+  })
+},
+  logout() {
+    return  axios.delete(`https://social-network.samuraijs.com/api/1.0/auth/login`,
+    {withCredentials:true,
+    //headers: {"API-KEY": "0d1f131a-af70-4463-84c0-a73c20105bab"}
+  })
 }
-     
-
-
-
-
-
+}

@@ -1,4 +1,5 @@
 import { authAPI } from "../api/api";
+import {stopSubmit} from "redux-form";
 
 const SET_USER_DATA = 'SET_USER_DATA';
 
@@ -19,7 +20,7 @@ export  const authReducer = (state = initialState, action) => {
         return {
             ...state,
             ...action.data, //... деструктуризации нужна так как в data будет сразу несколько значений (id, email, login...)
-            isAuth: true    
+       
         }
 
         default:
@@ -28,19 +29,53 @@ export  const authReducer = (state = initialState, action) => {
    
 }
 
-export const setAuthUserDataCreator = (id, email, login) => {
+export const setAuthUserDataCreator = (id, email, login, isAuth) => {
     return {
-        type: SET_USER_DATA, data: {id, email, login}
+        type: SET_USER_DATA, data: {id, email, login, isAuth}
     }
 }
+//thunk
 
 export const getAuthUserDataThunk = () => (dispatch) => {
-    authAPI.meAuth()
+   return authAPI.meAuth()
              .then(res => {
            //resultCoвe это инфа с сервера о том что авторизация состоялась, название и код зависит от настроек сервера
             if(res.data.resultCode ===0) {
                 let {id, email, login} = res.data.data
-                dispatch(setAuthUserDataCreator(id, email, login))
+                dispatch(setAuthUserDataCreator(id, email, login, true))
+            }
+        })
+}
+
+export const loginThunk = (email, password, rememberMe) => (dispatch) => {
+    //тест на проверку без запроса на сервер
+  //  let action = stopSubmit("email", {_error: "Email or password wrong"})
+  //  dispatch(action)
+   // return;
+    authAPI.login(email, password, rememberMe)
+             .then(res => {
+           //resultCoвe это инфа с сервера о том что авторизация состоялась, название и код зависит от настроек сервера
+            if(res.data.resultCode ===0) {
+                dispatch(getAuthUserDataThunk())
+            
+            } else {
+                let message = res.data.messages.length > 0 ? res.data.messages[0] : "Some error"
+                //тип messages и его значение если оно есть приходит с сервера, зависит от настроек сервера
+                let action = stopSubmit("email", {_error: message}); 
+                //stopSubmit встроенная в redux-form функция actioncreator, email это form из LoginReduxFom(reduxForm)
+                //_error - все возвможные ошибки фиксируемые redux-form
+                dispatch(action)
+            }
+        })
+}
+
+export const logoutThunk = () => (dispatch) => {
+    authAPI.logout()
+             .then(res => {
+           //resultCoвe это инфа с сервера о том что авторизация состоялась, название и код зависит от настроек сервера
+            if(res.data.resultCode ===0) {
+                dispatch(setAuthUserDataCreator(null, null, null, false))
+            
             }
         })
 }

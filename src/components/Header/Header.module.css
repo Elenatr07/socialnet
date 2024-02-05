@@ -1,5 +1,10 @@
 .login_block {
     float: right;
     margin-right: 25px;
-    margin-top: 18px;
+    margin-top: 12px;
+    
+}
+button {
+    margin-top: 0;
+    margin-left: 10px;
 }
