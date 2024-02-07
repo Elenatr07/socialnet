@@ -46,7 +46,7 @@ class App extends React.Component {
                     <Route path='/profile/*' 
                             element={<ProfileContainer />} /> {/*Все необходимо поместить в тег BrowserRouter и Roures*/}
                    
-                   <Route path='/profile/:userId'
+                   <Route path='/profile/:userId?'
                           element={<ProfileContainer/>}/>
                    
                     <Route path='/dialogs/*' 

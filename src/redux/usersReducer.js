@@ -1,13 +1,14 @@
-import { getUsers } from "../api/api";
-import { usersAPI } from './../api/api';
 
-const FOLLOW = 'FOLLOW';
-const UNFOLLOW = 'UNFOLLOW';
-const SET_USERS = 'SET_USERS';
-const SET_CORRENT_PAGE = 'SET_CORRENT_PAGE';
-const SET_TOTAL_USERS_COUNT = 'SET_TOTAL_USERS_COUNT'
-const TOGGLE_IS_FETCHING = 'TOGGLE_IS_FETCHING'
-const TOGGLE_IS_FOLLOWING_PROGRESS = 'TOGGLE_IS_FOLLOWING_PROGRESS'
+import { usersAPI } from './../api/api';
+import { updateObjectInArray } from './../utils/validators/objectHelpers';
+
+const FOLLOW = 'users/FOLLOW';
+const UNFOLLOW = 'users/UNFOLLOW';
+const SET_USERS = 'users/SET_USERS';
+const SET_CORRENT_PAGE = 'users/SET_CORRENT_PAGE';
+const SET_TOTAL_USERS_COUNT = 'users/SET_TOTAL_USERS_COUNT'
+const TOGGLE_IS_FETCHING = 'users/TOGGLE_IS_FETCHING'
+const TOGGLE_IS_FOLLOWING_PROGRESS = 'users/TOGGLE_IS_FOLLOWING_PROGRESS'
 
 
 let initialState = {
@@ -20,27 +21,32 @@ let initialState = {
 
 }
 export const usersReducer = (state=initialState, action) => {
+   
     switch(action.type) {
+        
         case FOLLOW:
             return {
                 ...state, //создание копии state
-                users: state.users.map(user => { //обход всего списка users и изменение folowed по id user из action
+                users: updateObjectInArray(state.users,'id', action.userId,  {followed: true})
+                //updateObjectInArray создали для удаления дублирования кода указанного ниже в follow и unfollow
+              /*  users: state.users.map(user => { //обход всего списка users и изменение folowed по id user из action
                     if (user.id === action.userId) {
                         return {...user, followed: true} //копирование user и изменение followed у тех у кого совпадает id
                     }
                     return user;
-                })
+                })*/
             }
             
         case UNFOLLOW:
             return {
                 ...state, //создание копии state
-                users: state.users.map(user => { //обход всего списка users и изменение folowed по id user из action
+                users: updateObjectInArray(state.users, 'id', action.userId,  {followed: false})
+              /*  users: state.users.map(user => { //обход всего списка users и изменение folowed по id user из action
                     if (user.id === action.userId) {
                         return {...user, followed: false}
                     }
                     return user;
-                })
+                })*/
             }
         case SET_USERS:
             return {
@@ -131,29 +137,28 @@ export const getUsersThunkCreator = (currentPage, pageSize )  => {
 }
 
 export const followThunk = (userId) => {
-    return (dispatch) => {
+    return async (dispatch) => {
        dispatch (setIsFollowingProgressCreator(true, userId))
-        usersAPI.follow(userId)
-            .then(res => {
+       let res = await usersAPI.follow(userId)
+          
          //resultCode это инфа с сервера о том что авторизация состоялась, название и код зависит от настроек сервера
             if(res.data.resultCode ===0) {
             dispatch (followActionCreator(userId))
             }
             dispatch (setIsFollowingProgressCreator(false, userId))
-            });
+            
     }
 }
 
 export const unFollowThunk = (userId) => {
-    return (dispatch) => {
+    return async (dispatch) => {
        dispatch (setIsFollowingProgressCreator(true, userId))
-        usersAPI.unfollow(userId)
-            .then(res => {
+       let res = await usersAPI.unfollow(userId)
+           
          //resultCode это инфа с сервера о том что авторизация состоялась, название и код зависит от настроек сервера
             if(res.data.resultCode ===0) {
             dispatch (unfollowActionCreator(userId))
             }
             dispatch (setIsFollowingProgressCreator(false, userId))
-            });
-    }
+        }
 }

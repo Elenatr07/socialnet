@@ -1,9 +1,9 @@
 import { profileAPI, usersAPI } from "../api/api";
 
-const ADD_POST = 'ADD_POST';
-
-const SET_USER_PROFILE = 'SET_USER_PROFILE';
-const SET_STATUS = 'SET_STATUS'
+const ADD_POST = 'profile/ADD_POST';
+const DELETE_POST = 'profile/DELETE_POST'
+const SET_USER_PROFILE = 'profile/SET_USER_PROFILE';
+const SET_STATUS = 'profile/SET_STATUS'
 
 let initialState = {
     postsData: [
@@ -59,6 +59,13 @@ export const profileReducer = (state = initialState, action) => {
             status: action.status
         }
     }
+    case DELETE_POST: {
+
+        return {
+            ...state,
+            postsData: state.postsData.filter(p => p.id !== action.postId)
+        }
+    }
         default:
             return state;
    }
@@ -84,32 +91,33 @@ export const setUserStatusCreator = (status) => {
         type: SET_STATUS, status
     }
 }
+export const deletePostCreator = (postId) => {
+    return {
+        type: DELETE_POST, postId
+    }
+}
 
 //thunk
 
-export const getUserProfileThunk = (profileId) => (dispatch) => {
-    profileAPI.getProfile(profileId)
-       .then(res => {
+export const getUserProfileThunk = (profileId) => async (dispatch) => {
+   let res = await profileAPI.getProfile(profileId)
+      
           dispatch (setUserProfileCreator(res.data))
          
-        });
-}
+        };
 
-export const getUserStatusThunk = (profileId) => (dispatch) => {
-    profileAPI.getStatus(profileId)
-       .then(res => {
+export const getUserStatusThunk = (profileId) => async (dispatch) => {
+   let res = await profileAPI.getStatus(profileId)
+       
           dispatch (setUserStatusCreator(res.data))
          
-        });
-}
+     
+};
 
-export const updateUserStatusThunk = (status) => (dispatch) => {
-    profileAPI.updateStatus(status)
-       .then(res => {
+export const updateUserStatusThunk = (status) => async (dispatch) => {
+  let res = await  profileAPI.updateStatus(status)
+      
         if (res.data.resultCode === 0) { //resultCode ===0 это требование зависит от того что backend считает полодительным ответом
            dispatch (setUserStatusCreator(status)) 
         }
-          
-         
-        });
 }

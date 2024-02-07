@@ -1,7 +1,7 @@
 import { authAPI } from "../api/api";
 import {stopSubmit} from "redux-form";
 
-const SET_USER_DATA = 'SET_USER_DATA';
+const SET_USER_DATA = 'auth/SET_USER_DATA';
 
 
 let initialState = {
@@ -36,24 +36,22 @@ export const setAuthUserDataCreator = (id, email, login, isAuth) => {
 }
 //thunk
 
-export const getAuthUserDataThunk = () => (dispatch) => {
-   return authAPI.meAuth()
-             .then(res => {
-           //resultCoвe это инфа с сервера о том что авторизация состоялась, название и код зависит от настроек сервера
+export const getAuthUserDataThunk = () => async (dispatch) => {
+   let res = await authAPI.meAuth();
+//resultCoвe это инфа с сервера о том что авторизация состоялась, название и код зависит от настроек сервера
             if(res.data.resultCode ===0) {
                 let {id, email, login} = res.data.data
                 dispatch(setAuthUserDataCreator(id, email, login, true))
             }
-        })
-}
+        }
 
-export const loginThunk = (email, password, rememberMe) => (dispatch) => {
+export const loginThunk = (email, password, rememberMe) => async (dispatch) => {
     //тест на проверку без запроса на сервер
   //  let action = stopSubmit("email", {_error: "Email or password wrong"})
   //  dispatch(action)
    // return;
-    authAPI.login(email, password, rememberMe)
-             .then(res => {
+   let res = await authAPI.login(email, password, rememberMe)
+             
            //resultCoвe это инфа с сервера о том что авторизация состоялась, название и код зависит от настроек сервера
             if(res.data.resultCode ===0) {
                 dispatch(getAuthUserDataThunk())
@@ -66,16 +64,14 @@ export const loginThunk = (email, password, rememberMe) => (dispatch) => {
                 //_error - все возвможные ошибки фиксируемые redux-form
                 dispatch(action)
             }
-        })
-}
+        }
 
-export const logoutThunk = () => (dispatch) => {
-    authAPI.logout()
-             .then(res => {
+export const logoutThunk = () => async (dispatch) => {
+   let res = await authAPI.logout()
+           
            //resultCoвe это инфа с сервера о том что авторизация состоялась, название и код зависит от настроек сервера
             if(res.data.resultCode ===0) {
                 dispatch(setAuthUserDataCreator(null, null, null, false))
             
             }
-        })
-}
+        }

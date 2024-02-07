@@ -1,6 +1,6 @@
 import { getAuthUserDataThunk } from "./authReducer";
 
-const INITIALIZING_SUCCESSED = 'INITIALIZING_SUCCESSED';
+const INITIALIZING_SUCCESSED = 'app/INITIALIZING_SUCCESSED';
 let initialState = {
 	initialized: false,
 };

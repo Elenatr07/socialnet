@@ -3,6 +3,7 @@ import style from './ProfileInfo.module.css'
 import Preloader from '../../Preloader/Preloader';
 
 import ProfileStatusFunc from './ProfileStatusFunc';
+let url = 'https://buzookod.ru/media/2816616767_vubrbeJ.jpg'
 
 export default function ProfileInfo(props) {
   if (!props.profile) {
@@ -19,7 +20,7 @@ export default function ProfileInfo(props) {
    {/*<ProfileStatus status={props.status} updateStatus={props.updateStatus}/>*/} 
    <ProfileStatusFunc status={props.status} updateStatus={props.updateStatus} />
     <div className={style.ava}>
-    <img className={style.content_logo} src={props.profile.photos.small} alt=''></img>
+    <img className={style.content_logo} src={props.profile.photos.small !== null ? props.profile.photos.small : url} alt=''></img>
 
     <div className={style.description}>
         <h3>{props.profile.fullName}</h3>

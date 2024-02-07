@@ -1,4 +1,4 @@
-import React from 'react'
+import React from "react";
 import axios from "axios";
 
 const baseUrl = 'https://social-network.samuraijs.com/api/1.0/'

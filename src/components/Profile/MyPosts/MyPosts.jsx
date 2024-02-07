@@ -10,8 +10,13 @@ import { Textarea } from "../../FormControls/FormControls";
 
 const maxLength10 = maxLengthCreator(10); //устанавливаем значие длины сообщения
 
-function MyPosts(props) {
-  let postsElements = props.postsData.map((obj) => {
+//React.memo для контроля перерендинга в функциональной компоненте, перерендинг ТОЛЬКО при изменении пропс или стайт
+//в классовой компоненте для этих целей надо использовать extends React.PureComponent
+const MyPosts = React.memo((props) => {
+ //alert('render')
+ //console.log("RENDER")
+ //функция reverse изменяет state, чтобы этого не было компонента должна для работы сосздать КОПИЮ стайта [...props.postsData], а не использовать сам стайт props.postsData
+  let postsElements = [...props.postsData].reverse().map((obj) => { 
     return <Post key={obj.id} message={obj.post} likesCount={obj.likesCount} />;
   });
 
@@ -29,7 +34,9 @@ function MyPosts(props) {
       {postsElements}
     </div>
   );
-}
+})
+
+
 
 const addPostForm = (props) => {
   return (
