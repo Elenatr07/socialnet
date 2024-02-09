@@ -4,3 +4,16 @@
 span {
     cursor: pointer;
 }
+.pageNumber {
+    padding: 2px;
+    border: 1px solid grey;
+    margin-left: 2px;
+    margin-right: 2px;
+}
+.pageButton {
+    margin-right: 10px;
+    margin-left: 10px;
+}
+.paginator {
+    text-align: center;
+}

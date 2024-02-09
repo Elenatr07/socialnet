@@ -11,7 +11,7 @@ function Header (props) {
          <h1 className='header_title'>Шапка</h1>
          <div className={style.login_block}>
             {props.isAuth 
-            ? <div className="headerButton">{props.login}   <button  onClick={props.logout}>Logout</button> </div> 
+            ? <div className={style.headerButton}>{props.login}   <button  onClick={props.logout}>Logout</button> </div> 
             : <NavLink to={'/login'}>Login</NavLink>}
             
 
