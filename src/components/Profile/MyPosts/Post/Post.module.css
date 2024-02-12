@@ -1,6 +1,10 @@
 .post_avatar {
     width: 50px
 }
+.postBody {
+    max-width: 70rem;
+    word-wrap: break-word;
+}
 .post {
-    
+    margin-left: 25px;
 }

@@ -143,11 +143,16 @@ export const getUserStatusThunk = (profileId) => async (dispatch) => {
 };
 
 export const updateUserStatusThunk = (status) => async (dispatch) => {
-  let res = await  profileAPI.updateStatus(status)
+    try {
+         let res = await  profileAPI.updateStatus(status)
       
         if (res.data.resultCode === 0) { //resultCode ===0 это требование зависит от того что backend считает полодительным ответом
            dispatch (setUserStatusCreator(status)) 
-        }
+        } 
+    } catch (error) {
+        alert("Some error updating data")
+    }
+
 }
 
 export const savePhotoThunk = (file) => async (dispatch) => {

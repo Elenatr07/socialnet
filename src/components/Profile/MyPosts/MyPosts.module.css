@@ -1,5 +1,9 @@
 .new_posts {
     margin-top: 25px;
+    margin-left: 25px;
+    font-style: italic;
+    font-weight: bold;
+    margin-bottom: 30px;
 }
 textarea {
     width: 95%;

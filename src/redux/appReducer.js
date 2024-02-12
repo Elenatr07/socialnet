@@ -3,6 +3,7 @@ import { getAuthUserDataThunk } from "./authReducer";
 const INITIALIZING_SUCCESSED = 'app/INITIALIZING_SUCCESSED';
 let initialState = {
 	initialized: false,
+	globalError: null
 };
 
 const appReducer = (state = initialState, action) => {

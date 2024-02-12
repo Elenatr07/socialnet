@@ -8,7 +8,7 @@ import {
 } from "../../../utils/validators/validator";
 import { Textarea } from "../../FormControls/FormControls";
 
-const maxLength10 = maxLengthCreator(10); //устанавливаем значие длины сообщения
+const maxLength310 = maxLengthCreator(310); //устанавливаем значие длины сообщения
 
 //React.memo для контроля перерендинга в функциональной компоненте, перерендинг ТОЛЬКО при изменении пропс или стайт
 //в классовой компоненте для этих целей надо использовать extends React.PureComponent
@@ -44,7 +44,7 @@ const addPostForm = (props) => {
       <Field
         component={Textarea}
         name="newPostText"
-        validate={[requiredField, maxLength10]}
+        validate={[requiredField, maxLength310]}
         placeholder="Post text"
       />
 

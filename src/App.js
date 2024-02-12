@@ -12,12 +12,17 @@ import { compose } from 'redux';
 import { connect } from 'react-redux';
 import {initializeApp} from './redux/appReducer'
 import Preloader from './components/Preloader/Preloader';
+import PageNotFound from './components/FormControls/PageNotFound';
+import Home from './components/Home/Home';
 const ProfileContainer = React.lazy(()=> import ('./components/Profile/ProfileContainer'));
 const DialogsContainer = React.lazy(()=> import ('./components/Dialogs/DialogsContainer'));
 
 
 
 class App extends React.Component {
+  catchAllUnhandledErrors = (promiseRejectionEvent) => {
+    alert("some error occured") //если в компоненте прописан локальный обработчик ошибки то глобальный уже не сработает на эту ошибку
+  }
   componentDidMount() {
 
     this.props.initializeApp();
@@ -33,6 +38,12 @@ class App extends React.Component {
             this.props.setAuthUser(id, email, login)
         }
     })*/
+    window.addEventListener("unhandledrejection", this.catchAllUnhandledErrors) 
+
+    
+}
+componentWillUnmount() { //требуется обязательно если в componentDidMount есть какая-либо подписка на события!!! (например addEventListener)
+    window.removeEventListener("unhandledrejection", this.catchAllUnhandledErrors)
 }
   render () {
     if(!this.props.initialized) {return <Preloader />}
@@ -43,12 +54,12 @@ class App extends React.Component {
             <Navbar />
             <div className='main_content'>
             <Suspense fallback={<div><Preloader /></div>}>
-                <Routes>
+                <Routes> 
                     <Route path='/profile/*' 
-                            element={<ProfileContainer />} /> {/*Все необходимо поместить в тег BrowserRouter и Roures*/}
+                            element={<ProfileContainer />} /> {/*Все необходимо поместить в тег BrowserRouter и Routes*/}
                    
                    <Route path='/profile/:userId?'
-                          element={<ProfileContainer/>}/>
+                          element={<ProfileContainer/>}/> 
                    
                     <Route path='/dialogs/*' 
                           element={<DialogsContainer 
@@ -56,8 +67,12 @@ class App extends React.Component {
                                  />} />
                     <Route path='/users/*' 
                   element={<UsersContainer />} />
-                        <Route path='/login/*' 
-                  element={<Login/>} />
+                        
+                    <Route path='/login/*' 
+                  element={<Login/>} /> 
+                  <Route path='*' element={<PageNotFound />} />
+                  <Route path='/home' element={<Home />} />
+                   <Route path='' element={<Home />} />
                
                   
                 </Routes>

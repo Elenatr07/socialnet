@@ -77,7 +77,7 @@ const ProfileData = ({profile, isOwner, toEditMode}) => {
   return (<div>
     <h3 className={style.fullName}>{profile.fullName}</h3>
     <div>
-      {isOwner && <button onClick={toEditMode}>edit</button>}
+      {isOwner && <button className={style.profileEditButton} onClick={toEditMode}>edit</button>}
     </div>
       <p className={style.contacts}>Contacts</p> 
         <div className={style.description}>
