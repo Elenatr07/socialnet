@@ -14,14 +14,14 @@ export const usersAPI = {
     },
        follow(userId) {
         return axios.post(`https://social-network.samuraijs.com/api/1.0/follow/${userId}`, {}, 
-        {withCredentials:true
-        //headers: {"API-KEY": "0d1f131a-af70-4463-84c0-a73c20105bab"}
+        {withCredentials:true,
+        headers: {"API-KEY": "0d1f131a-af70-4463-84c0-a73c20105bab"}
         })
       },
       unfollow(userId)  {
         return axios.delete(`https://social-network.samuraijs.com/api/1.0/follow/${userId}`,
         {withCredentials:true,
-       //headers: {"API-KEY": "0d1f131a-af70-4463-84c0-a73c20105bab"}
+       headers: {"API-KEY": "0d1f131a-af70-4463-84c0-a73c20105bab"}
      })
       },
     
@@ -44,7 +44,26 @@ export const profileAPI = {
     {withCredentials:true,
       headers: {"API-KEY": "0d1f131a-af70-4463-84c0-a73c20105bab"}
       }) //первый status требование от backend при put запросе, второй название переменной
-   }
+   },
+   savePhoto(file) {
+    const formData = new FormData();
+    formData.append('image', file)
+    return axios.put(`https://social-network.samuraijs.com/api/1.0/profile/photo`, formData,
+    {withCredentials:true,
+      headers: {"API-KEY": "0d1f131a-af70-4463-84c0-a73c20105bab", 
+                "Content-Type": 'multipart/form-data'
+    }          
+      }) 
+   },
+   saveProfile(profile) {
+    return axios.put(`https://social-network.samuraijs.com/api/1.0/profile`, profile,
+    {withCredentials:true,
+      headers: {"API-KEY": "0d1f131a-af70-4463-84c0-a73c20105bab"
+               
+    }          
+      }) 
+   },
+
 }
 
 export const authAPI = {
@@ -56,8 +75,8 @@ export const authAPI = {
      
   },
   //email, password, rememberMe, captcha требования с backend при отправлении post запроса
-  login(email, password, rememberMe=false) {
-    return  axios.post(`https://social-network.samuraijs.com/api/1.0/auth/login`, {email, password, rememberMe},
+  login(email, password, rememberMe=false, captcha = null) {
+    return  axios.post(`https://social-network.samuraijs.com/api/1.0/auth/login`, {email, password, rememberMe, captcha},
     {withCredentials:true,
      headers: {"API-KEY": "0d1f131a-af70-4463-84c0-a73c20105bab"}
   })
@@ -65,7 +84,18 @@ export const authAPI = {
   logout() {
     return  axios.delete(`https://social-network.samuraijs.com/api/1.0/auth/login`,
     {withCredentials:true,
-    //headers: {"API-KEY": "0d1f131a-af70-4463-84c0-a73c20105bab"}
+    headers: {"API-KEY": "0d1f131a-af70-4463-84c0-a73c20105bab"}
   })
 }
+}
+
+export const securityAPI = {
+  getCaptchaUrl () {
+    return  axios.get(`https://social-network.samuraijs.com/api/1.0/security/get-captcha-url`,
+     {withCredentials:true,
+      headers: {"API-KEY": "0d1f131a-af70-4463-84c0-a73c20105bab"}
+    })
+     
+  },
+
 }

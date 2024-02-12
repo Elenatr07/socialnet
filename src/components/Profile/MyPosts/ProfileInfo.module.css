@@ -8,8 +8,52 @@
     margin-top: 15px;
 }
 .description {
-    margin-left: 25px;
+  margin-left: 25px;
+  display: flex;
+  height: 110px;
+  flex-direction: column;
+  flex-wrap: wrap;
   }
   .main_content_img {
     width: 100%;
   }
+  .profileInput {
+    margin-top: 20px;
+    margin-left: 25px;
+  }
+  .statusBlock,
+  .fullName,
+  .contacts,
+  .aboutMe {
+    margin-left: 25px;
+  }
+   
+  .descriptionItem {
+    width: 34rem
+  }
+  .contacts,
+  .aboutMe {
+    font-weight: bold;
+    font-style: italic;
+  }
+
+  .contactValue {
+    margin-left: 25px ;
+}
+.contactItem {
+    display: flex;
+    margin-top: 5px;
+}
+
+.formSummaryError {
+    
+  padding: 5px;
+  color: red;
+}
+.descriptionEdit {
+  height: 200px;
+  display: flex;
+  flex-direction: column;
+  flex-wrap: wrap;
+  margin-left: 25px;
+}

@@ -1,4 +1,5 @@
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useState } from 'react';
+import style from './ProfileInfo.module.css'
 
 export default function ProfileStatusFunc(props) {
 
@@ -22,7 +23,7 @@ export default function ProfileStatusFunc(props) {
   return (
     <div>
     {!editMode &&
-        <div>
+        <div className={style.statusBlock}>
             <span onDoubleClick={activateEditMode} >{props.status || "enter your status"}</span>
         </div>}
    {editMode &&

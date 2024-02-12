@@ -1,9 +1,12 @@
+import { stopSubmit } from "redux-form";
 import { profileAPI, usersAPI } from "../api/api";
 
 const ADD_POST = 'profile/ADD_POST';
 const DELETE_POST = 'profile/DELETE_POST'
 const SET_USER_PROFILE = 'profile/SET_USER_PROFILE';
-const SET_STATUS = 'profile/SET_STATUS'
+const SET_STATUS = 'profile/SET_STATUS';
+const SAVE_PHOTO = 'SAVE_PHOTO';
+const SAVE_PROFILE = 'SAVE-PROFILE'
 
 let initialState = {
     postsData: [
@@ -12,7 +15,8 @@ let initialState = {
       ],
    
     profile: null,
-    status: ""
+    status: "",
+    
 }
 
 
@@ -66,6 +70,18 @@ export const profileReducer = (state = initialState, action) => {
             postsData: state.postsData.filter(p => p.id !== action.postId)
         }
     }
+    case SAVE_PHOTO: {
+        return {
+            ...state,
+            profile: {...state.profile, photos: action.photos}
+        }
+    }
+    case SAVE_PROFILE: {
+        return {
+            ...state,
+            profile: action.profile
+        }
+    }
         default:
             return state;
    }
@@ -97,6 +113,18 @@ export const deletePostCreator = (postId) => {
     }
 }
 
+export const savePhotoCreator = (photos) => {
+    return {
+        type: SAVE_PHOTO, photos
+    }
+}
+
+export const saveProfileCreator = (profile) => {
+    return {
+        type: SAVE_PROFILE, profile
+    }
+}
+
 //thunk
 
 export const getUserProfileThunk = (profileId) => async (dispatch) => {
@@ -121,3 +149,25 @@ export const updateUserStatusThunk = (status) => async (dispatch) => {
            dispatch (setUserStatusCreator(status)) 
         }
 }
+
+export const savePhotoThunk = (file) => async (dispatch) => {
+    let res = await  profileAPI.savePhoto(file)
+        
+          if (res.data.resultCode === 0) { //resultCode ===0 это требование зависит от того что backend считает полодительным ответом
+             dispatch (savePhotoCreator(res.data.data.photos)) 
+          }
+  }
+
+  export const saveProfileThunk = (profile) => async (dispatch, getState) => {
+    const userId = getState().auth.id;
+    const res = await  profileAPI.saveProfile(profile)
+    
+        
+          if (res.data.resultCode === 0) { //resultCode ===0 это требование зависит от того что backend считает полодительным ответом
+             dispatch (getUserProfileThunk(userId)) 
+          } else {
+            dispatch(stopSubmit("profileData", {_error: res.data.messages[0]}));
+           // return Promise.reject(res.data.messages[0]);
+           return res.data.resultCode
+          }
+  }

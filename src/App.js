@@ -1,5 +1,5 @@
 
-import { BrowserRouter, Route, Routes } from 'react-router-dom';
+import {HashRouter, Route, Routes } from 'react-router-dom';
 import './App.css';
 import React, { Suspense } from 'react';
 import Navbar from './components/Navbar/Navbar';
@@ -37,7 +37,7 @@ class App extends React.Component {
   render () {
     if(!this.props.initialized) {return <Preloader />}
     return (
-    <BrowserRouter> 
+    <HashRouter > {/* BrowserRouter basename={process.env.PUBLIC_URL}*/}
         <div className="app-wrapper">
         <HeaderContainer />
             <Navbar />
@@ -68,7 +68,7 @@ class App extends React.Component {
         
     
         </div>
-    </BrowserRouter>
+    </HashRouter>
    
   );
 }

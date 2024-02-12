@@ -3,7 +3,7 @@ import axios from "axios";
 
 import Profile from "./Profile";
 import { connect } from "react-redux";
-import { getUserProfileThunk, getUserStatusThunk, setUserProfileCreator, updateUserStatusThunk } from "../../redux/profileReducer";
+import { getUserProfileThunk, getUserStatusThunk, savePhotoThunk, saveProfileThunk, setUserProfileCreator, updateUserStatusThunk } from "../../redux/profileReducer";
 import { Navigate, useLocation, useNavigate, useParams } from "react-router-dom";
 import { usersAPI } from "../../api/api";
 import { withAuthRedirect } from "../../hoc/withAuthRedirect";
@@ -29,7 +29,7 @@ function withRouter(Component) {
 
 class ProfileContainer extends React.Component  {
     
-    componentDidMount() {
+    refreshProfile() {
      // debugger;
         let profileId = this.props.router.params.userId; //userId это название роута из App.js
         if (!profileId) {
@@ -47,6 +47,18 @@ class ProfileContainer extends React.Component  {
           });*/
     }
 
+    componentDidMount() {
+        this.refreshProfile();
+    }
+
+    //чтобы обновить пользователя при смене его Id
+    componentDidUpdate(prevProps, prevState, snapshot) {
+        if(this.props.router.params.userId !== prevProps.router.params.userId)  {
+            this.refreshProfile();
+        }
+        
+    }
+
     render() {
         
         return (
@@ -54,9 +66,11 @@ class ProfileContainer extends React.Component  {
                 
             <Profile 
                 {...this.props} 
+                isOwner= {!this.props.router.params.userId} //двойное отрицание приводит к булевому значению false. т.е если Id не указано то ты owner так как прошла авторизация
                 profile={this.props.profile} 
                 status = {this.props.status}
                 updateStatus= {this.props.updateStatus}
+                savePhoto = {this.props.savePhoto}
             
             
             /> 
@@ -102,7 +116,9 @@ export default  compose(connect (mapStateToProps, {
    // setUserProfile: setUserProfileCreator ,
     getUserProfileThunk: getUserProfileThunk,
     getUserStatusThunk: getUserStatusThunk,
-    updateStatus: updateUserStatusThunk
+    updateStatus: updateUserStatusThunk,
+    savePhoto: savePhotoThunk,
+    saveProfile: saveProfileThunk,
 
 
 }),

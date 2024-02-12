@@ -2,26 +2,26 @@ import React, { useState } from 'react';
 import style from './Paginator.module.css';
 import cn from "classnames"
 
-/*let Paginator = (props) => {
-        let pagesCount = Math.ceil( props.totalUsersCount / props.pageSize) //определение кол-ва страниц
+let Paginator = (props) => {
+        let pagesCount = Math.ceil( props.totalItemsCount / props.pageSize) //определение кол-ва страниц
         let pages= [];
         for (let i=1; i <= pagesCount; i++) {
             pages.push(i)
    
         }
-   return (   <div>
+   return (   <div className={style.paginator}>
                     {pages.map(p => {
-                        if (p === 1 || p === pagesCount || (p >= props.currentPage - 2 && p <= props.currentPage + 2)) {
+                        if (p === 1 || p === pagesCount || (p >= props.currentPage - 9 && p <= props.currentPage + 9)) {
                             return (
-                                <span
+                                <span 
                                     key={p}
-                                    className={props.currentPage === p ? style.select_page : ''}
+                                    className={props.currentPage === p ? style.select_page : style.pageNumber}
                                     onClick={(e) => {
                                         props.onPageChanged(p)
                                     }}>{p} </span>
                             );
-                        } else if (p === props.currentPage - 3 || p === props.currentPage + 3) {
-                            return <span key={p}>... </span>;
+                        } else if (p === props.currentPage - 10 || p === props.currentPage + 10) {
+                            return <span  key={p}>... </span>;
                         } else {
                             return null;
                         }
@@ -31,9 +31,9 @@ import cn from "classnames"
   
 }
 
-export default Paginator;*/
+export default Paginator;
 
-let Paginator = ({totalItemsCount, pageSize, currentPage, onPageChanged, portionSize =10}) => {
+/*let Paginator = ({totalItemsCount, pageSize, currentPage, onPageChanged, portionSize =10}) => {
     let pagesCount = Math.ceil(totalItemsCount / pageSize);
 
     let pages = [];
@@ -63,4 +63,4 @@ let Paginator = ({totalItemsCount, pageSize, currentPage, onPageChanged, portion
 
     </div>
 }
-export default Paginator;
+export default Paginator;*/

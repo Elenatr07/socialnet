@@ -17,7 +17,7 @@ const User = ({user, followingInProgress, unFollowThunk, followThunk}) => {
                     <div className={style.user_block}>
                       <div className={style.avatar_block}>
                         <NavLink to={'/profile/' + user.id} >
-                          <img className={style.user_avatar} src={user.photos.small !== null ? user.photos.small :url } alt='' /> 
+                          <img className={style.user_avatar} src={user.photos.small || url } alt='' /> 
                         </NavLink>
                         
                         <div className={style.button_follow}>
