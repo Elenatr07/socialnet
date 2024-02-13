@@ -1,6 +1,6 @@
 import React from 'react'
 
-import { sendMessageCreator } from '../../redux/dialogsReducer'
+import { sendMessageCreator, startChartingThunk } from '../../redux/dialogsReducer'
 import Dialogs from './Dialogs'
 import { connect } from 'react-redux'
 import { Navigate } from 'react-router-dom'
@@ -24,6 +24,7 @@ import { compose } from 'redux'
             messageData: state.dialogsPage.messageData,
             newMessageText: state.dialogsPage.newMessageText,
            // isAuth: state.auth.isAuth
+           dialogs: state.dialogsPage.dialogs
 
         }
     }
@@ -40,5 +41,6 @@ import { compose } from 'redux'
  //передано в compose
 
  export default compose(
-    connect(mapStateToProps, mapDispatchToProps),
+    connect(mapStateToProps, {mapDispatchToProps, 
+        startCharting: startChartingThunk}),
     withAuthRedirect)(Dialogs)

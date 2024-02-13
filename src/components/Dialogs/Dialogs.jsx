@@ -49,13 +49,16 @@ let addNewMessege = (values) => {
         <div className={style.dialog_items}>
             <h2>Dialogs</h2>
                
-              {dialogsElements}
+            {dialogsElements}
          
 
         </div>
         <div className={style.messages}> 
             <div>{messagesElemants}</div>
-           <AddMessageFormRedux onSubmit={addNewMessege} />
+          <AddMessageFormRedux onSubmit={addNewMessege} />
+        </div>
+        <div>
+            
         </div>
         
     </div>

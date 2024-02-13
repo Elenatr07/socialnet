@@ -1,5 +1,7 @@
+import { dialogsAPI } from "../api/api";
 
 const SEND_MESSAGE = 'dialogs/SEND_MESSAGE';
+const START_CHARTING = 'dialogs/START_CHARTING'
 
 let initialState = {
     messageData: [
@@ -14,6 +16,7 @@ let initialState = {
         {id: 3, name: 'Sam'},
         {id: 4, name: 'Mikhale'}
     ],
+    dialogs: []
         
 }
 export const dialogsReducer = (state=initialState, action) => {
@@ -45,12 +48,22 @@ export const dialogsReducer = (state=initialState, action) => {
             return stateCopy; 
             //используем return взамен breake, если не использовать return или breake функция будет бесконечной
         
-        
+        case START_CHARTING:
+            return {
+                ...state,
+                dialogs: action.friendId
+            }
             default:
                 return state;
     }
 
     
+}
+
+export const startChartingCreator = (friendId) => {
+    return {
+        type: START_CHARTING, friendId
+    }
 }
 /* можно улучшить код
 switch (action.type)
@@ -73,6 +86,14 @@ export const sendMessageCreator = (newMessageText) => { //newMessageTaet это 
     return {
         type: SEND_MESSAGE, newMessageText
     }
+}
+
+export const startChartingThunk = (friendId) => async (dispatch) => {
+    const res = await dialogsAPI.startChating(friendId)
+    if(res.data.resultCode === 0) {
+        dispatch (startChartingCreator(res.data))
+    }
+
 }
 
 
