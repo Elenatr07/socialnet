@@ -11,7 +11,10 @@ export default function ProfileStatusFunc(props) {
     }, [props.status])
 
     const activateEditMode = ()=> {
-        setEditMode(true)
+        if(props.isOwner) {
+         setEditMode(true)   
+        }
+        
     }
     const onStatusChange = (e) => {
         setStatus(e.currentTarget.value)
@@ -22,9 +25,10 @@ export default function ProfileStatusFunc(props) {
     }
   return (
     <div>
+   
     {!editMode &&
         <div className={style.statusBlock}>
-            <span onDoubleClick={activateEditMode} >{props.status || "enter your status"}</span>
+            <span onDoubleClick={activateEditMode} >{props.status || "The status is not specified"}</span>
         </div>}
    {editMode &&
         <div>
@@ -36,3 +40,4 @@ export default function ProfileStatusFunc(props) {
 </div>
   )
 }
+

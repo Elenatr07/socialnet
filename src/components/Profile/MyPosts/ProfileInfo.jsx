@@ -44,6 +44,7 @@ let [editMode, setEditMode] = useState(false);
       <ProfileStatusFunc
         status={props.status}
         updateStatus={props.updateStatus}
+        isOwner={props.isOwner}
       />
       <div >
         <div className={style.ava}>
