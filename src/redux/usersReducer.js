@@ -2,6 +2,7 @@
 import { usersAPI } from './../api/api';
 import { updateObjectInArray } from './../utils/validators/objectHelpers';
 
+
 const FOLLOW = 'users/FOLLOW';
 const UNFOLLOW = 'users/UNFOLLOW';
 const SET_USERS = 'users/SET_USERS';
@@ -132,6 +133,7 @@ export const getUsersThunkCreator = (currentPage, pageSize )  => {
        dispatch (setIsFetchingCreator(false));
        dispatch (setUsersCreator(data.items));
        dispatch(setTotalUsersCountCreator(data.totalCount))
+
        });
 }
 }

@@ -1,11 +1,14 @@
 import React from 'react'
 
-import { sendMessageCreator, startChartingThunk } from '../../redux/dialogsReducer'
+import { getChartingThunk, getChatingThunk, getFriendsThunk, sendMessageCreator, sendMessageThunk, startChartingThunk, startChatingThunk } from '../../redux/dialogsReducer'
 import Dialogs from './Dialogs'
 import { connect } from 'react-redux'
-import { Navigate } from 'react-router-dom'
+
 import { withAuthRedirect } from '../../hoc/withAuthRedirect'
 import { compose } from 'redux'
+import { getPageSize, getTotalUsersCount, getcurrentPaget } from '../../redux/usersSelector'
+import { getUsersThunkCreator } from '../../redux/usersReducer'
+
 
 
 
@@ -24,7 +27,12 @@ import { compose } from 'redux'
             messageData: state.dialogsPage.messageData,
             newMessageText: state.dialogsPage.newMessageText,
            // isAuth: state.auth.isAuth
-           dialogs: state.dialogsPage.dialogs
+           dialogs: state.dialogsPage.dialogs,
+           friends: state.dialogsPage.friends,
+           pageSize: getPageSize(state),
+           totalUsersCount: getTotalUsersCount(state),
+            currentPage: getcurrentPaget(state),
+
 
         }
     }
@@ -42,5 +50,10 @@ import { compose } from 'redux'
 
  export default compose(
     connect(mapStateToProps, {mapDispatchToProps, 
-        startCharting: startChartingThunk}),
+    startChating: startChatingThunk,
+    getFriends: getFriendsThunk,
+    getUsersThunk: getUsersThunkCreator,
+    getChating: getChatingThunk,
+    sendMessage:sendMessageThunk
+}),
     withAuthRedirect)(Dialogs)

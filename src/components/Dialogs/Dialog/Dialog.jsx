@@ -7,7 +7,10 @@ export default function Dialog (props) {
   <div >
     
 
-  <NavLink className={navData=> navData.isActive ? style.active : style.dialog} to={"/dialogs/"+ props.id}>{props.name}</NavLink> 
+  <div >{props.name}</div> 
+  <div>New messages: {props.newMessages}</div>
+  <img src={props.photos.small} alt=''/>
+
   </div>
-  )
+  ) 
 }

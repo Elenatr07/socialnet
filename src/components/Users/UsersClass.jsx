@@ -22,6 +22,7 @@ const UsersClass = (props) => {
 
              {
                 props.users.map((user) => ( 
+                
                 <User user={user}
                 followingInProgress= {props.followingInProgress}
                 unFollowThunk={props.unFollowThunk}

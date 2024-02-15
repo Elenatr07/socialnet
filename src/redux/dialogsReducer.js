@@ -1,7 +1,11 @@
-import { dialogsAPI } from "../api/api";
+import { dialogsAPI, usersAPI } from "../api/api";
+import { setCurrentPageCreator, setTotalUsersCountCreator } from "./usersReducer";
+
 
 const SEND_MESSAGE = 'dialogs/SEND_MESSAGE';
 const START_CHARTING = 'dialogs/START_CHARTING'
+const GET_FRIENDS= 'dialogs/GET_FRIENDS'
+const GET_CHARTING = 'dialogs/GET_CHARTING'
 
 let initialState = {
     messageData: [
@@ -10,13 +14,10 @@ let initialState = {
         {id: 3, message: 'Hola'},
         {id: 4, message: 'Salud'}
       ],       
-        dialogsData: [
-        {id: 1, name: 'Elena'},
-        {id: 2, name: 'Joe'},
-        {id: 3, name: 'Sam'},
-        {id: 4, name: 'Mikhale'}
-    ],
-    dialogs: []
+    dialogsData: [],
+
+    dialogs: [],
+    friends: []
         
 }
 export const dialogsReducer = (state=initialState, action) => {
@@ -35,24 +36,35 @@ export const dialogsReducer = (state=initialState, action) => {
     }*/
 
     /* использование switch*/
-    let stateCopy = {...state};
+   
     switch(action.type) { 
         
         case SEND_MESSAGE: 
-            let newMessege = {
-                id: 5,
-                message: action.newMessageText,
-            };
-            stateCopy.messageData = [...state.messageData]
-            stateCopy.messageData.push(newMessege);
-            return stateCopy; 
-            //используем return взамен breake, если не использовать return или breake функция будет бесконечной
-        
+          return {
+            ...state,
+            dialogs: action.dialogs
+          }        
         case START_CHARTING:
             return {
                 ...state,
-                dialogs: action.friendId
+                dialogs: action.dialogs
+            } 
+            case GET_FRIENDS: 
+            return {
+                
+                ...state,
+                friends: action.friends.filter((friend) => friend.followed) /*state.friends.map(friend => {
+                    if(friend.followed) {
+                        return {...friend}
+                    }
+                    return friend
+                }) */
             }
+            case GET_CHARTING:
+                return {
+                    ...state,
+                    dialogsData: action.dialogsData
+                }
             default:
                 return state;
     }
@@ -60,9 +72,9 @@ export const dialogsReducer = (state=initialState, action) => {
     
 }
 
-export const startChartingCreator = (friendId) => {
+export const startChartingCreator = (dialogs) => {
     return {
-        type: START_CHARTING, friendId
+        type: START_CHARTING, dialogs
     }
 }
 /* можно улучшить код
@@ -81,6 +93,17 @@ return {
 }
 
 */
+export const getChartingCreator = (dialogsData) => {
+    return {
+        type: GET_CHARTING, dialogsData
+    }
+}
+
+export const getFriendsCreator = (friends) => {
+    return {
+        type: GET_FRIENDS, friends
+    }
+}
 
 export const sendMessageCreator = (newMessageText) => { //newMessageTaet это название name из Fielg в Dialogs
     return {
@@ -88,12 +111,37 @@ export const sendMessageCreator = (newMessageText) => { //newMessageTaet это 
     }
 }
 
-export const startChartingThunk = (friendId) => async (dispatch) => {
+//thunk
+
+export const startChatingThunk = (friendId) => async (dispatch) => {
     const res = await dialogsAPI.startChating(friendId)
-    if(res.data.resultCode === 0) {
-        dispatch (startChartingCreator(res.data))
-    }
+    
+        dispatch (startChartingCreator(res.data.messages))
+    
 
 }
 
+export const getFriendsThunk = (currentPage, pageSize) => async (dispatch) => {
+    const res = await usersAPI.getUsers(currentPage, pageSize)
+    dispatch(getFriendsCreator(res.items));
+    dispatch(setTotalUsersCountCreator(res.totalCount));
+    dispatch(setCurrentPageCreator(currentPage));
+
+}
+export const getChatingThunk = (dialogsData) => async (dispatch) => {
+    const res = await dialogsAPI.getChating(dialogsData)
+    dispatch (getChartingCreator(res.data))
+  
+
+}
+export const sendMessageThunk = (userId, newMessageText) => async (dispatch) => {
+
+    const res = await dialogsAPI.sendMessage(userId)
+    if(res.data.resultCode === 0) {
+        dispatch (sendMessageCreator(newMessageText))
+    }
+    
+  
+
+}
 
