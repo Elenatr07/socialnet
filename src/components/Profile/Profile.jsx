@@ -16,7 +16,9 @@ function Profile (props) {
        savePhoto={props.savePhoto}
        saveProfile={props.saveProfile}/>
         <MyPostsContainer
-       // store = {props.store}
+        
+        
+      
     
         
          />

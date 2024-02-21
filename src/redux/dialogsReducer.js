@@ -3,21 +3,16 @@ import { setCurrentPageCreator, setTotalUsersCountCreator } from "./usersReducer
 
 
 const SEND_MESSAGE = 'dialogs/SEND_MESSAGE';
-const START_CHARTING = 'dialogs/START_CHARTING'
+const GET_LIST = 'dialogs/GET_LIST'
 const GET_FRIENDS= 'dialogs/GET_FRIENDS'
 const GET_CHARTING = 'dialogs/GET_CHARTING'
 
-let initialState = {
-    messageData: [
-        {id: 1, message: 'Hi'},
-        {id: 2, message: "Hello"},
-        {id: 3, message: 'Hola'},
-        {id: 4, message: 'Salud'}
-      ],       
-    dialogsData: [],
 
+let initialState = {
+     dialogsData: [],
     dialogs: [],
-    friends: []
+    friends: [],
+    chats:[]
         
 }
 export const dialogsReducer = (state=initialState, action) => {
@@ -42,9 +37,10 @@ export const dialogsReducer = (state=initialState, action) => {
         case SEND_MESSAGE: 
           return {
             ...state,
-            dialogs: action.dialogs
+            ...action.dialogs,
+          
           }        
-        case START_CHARTING:
+        case GET_LIST:
             return {
                 ...state,
                 dialogs: action.dialogs
@@ -65,6 +61,7 @@ export const dialogsReducer = (state=initialState, action) => {
                     ...state,
                     dialogsData: action.dialogsData
                 }
+            
             default:
                 return state;
     }
@@ -72,9 +69,9 @@ export const dialogsReducer = (state=initialState, action) => {
     
 }
 
-export const startChartingCreator = (dialogs) => {
+export const getListMessagesCreator = (dialogs) => {
     return {
-        type: START_CHARTING, dialogs
+        type: GET_LIST, dialogs
     }
 }
 /* можно улучшить код
@@ -105,18 +102,20 @@ export const getFriendsCreator = (friends) => {
     }
 }
 
-export const sendMessageCreator = (newMessageText) => { //newMessageTaet это название name из Fielg в Dialogs
+export const sendMessageCreator = (body) => { //body это название name из Fielg в Dialogs
     return {
-        type: SEND_MESSAGE, newMessageText
+        type: SEND_MESSAGE, body
     }
 }
 
+
+
 //thunk
 
-export const startChatingThunk = (friendId) => async (dispatch) => {
-    const res = await dialogsAPI.startChating(friendId)
+export const getListMessagesThunk = (friendId) => async (dispatch) => {
+    const res = await dialogsAPI.getListMessages(friendId)
     
-        dispatch (startChartingCreator(res.data.messages))
+        dispatch (getListMessagesCreator(res.data.items))
     
 
 }
@@ -134,14 +133,18 @@ export const getChatingThunk = (dialogsData) => async (dispatch) => {
   
 
 }
-export const sendMessageThunk = (userId, newMessageText) => async (dispatch) => {
+export const sendMessageThunk = (friendId, body) => async (dispatch) => {
 
-    const res = await dialogsAPI.sendMessage(userId)
+    const res = await dialogsAPI.sendMessage(friendId, body)
     if(res.data.resultCode === 0) {
-        dispatch (sendMessageCreator(newMessageText))
-    }
-    
-  
-
+        dispatch (sendMessageCreator(body));
+      dispatch(getListMessagesThunk(friendId))
+         
+      }
+   
 }
+
+
+
+
 

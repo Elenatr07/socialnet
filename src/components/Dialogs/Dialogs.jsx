@@ -1,16 +1,13 @@
-import React, { useEffect } from 'react'
+import React, { useEffect  } from 'react'
 import style from "./Dialogs.module.css"
 
 import Dialog from './Dialog/Dialog'
 import Message from './Message/Message'
-import { NavLink, Navigate } from 'react-router-dom'
-import {Field, reduxForm} from "redux-form"
+import { NavLink} from 'react-router-dom'
+import {Field, reduxForm, reset } from "redux-form"
 import { Textarea } from '../FormControls/FormControls'
 import { maxLengthCreator, requiredField } from '../../utils/validators/validator'
-import Paginator from '../FormControls/Paginator/Paginator'
-
-
-
+import MessageBlock from './MessageBlock'
 
 
 
@@ -19,6 +16,20 @@ import Paginator from '../FormControls/Paginator/Paginator'
 
 export default function Dialogs(props) {
 
+    
+let friendId = props.router.params.friendId;
+let owner = props.owner
+let isUser = !friendId ? owner : friendId
+
+useEffect(()=> {
+    
+    props.getChating();
+}, [])
+
+useEffect(()=> {
+    props.getListMessages(isUser)
+}, [isUser])
+
 
 
 
@@ -26,33 +37,31 @@ let dialogsElements = props.dialogsData.map((obj) => {
 
 
     return(
+      
         <NavLink className={navData=> navData.isActive ? style.active : style.dialog} 
-        to={"/dialogs/"+ obj.id} onClick={()=> {props.startChating(obj.id)}}>
+        to={"/dialogs/"+ obj.id} onClick={()=> {props.getListMessages(obj.id)}}>
             <Dialog key={obj.id} name={obj.userName} id={obj.id} newMessages={obj.newMessagesCount} 
             photos={obj.photos} lastdialog = {obj.lastDialogActivityDate} lastActivity={obj.lastUserActivityDate} /> 
         </NavLink>
        
     )
+   
     
 })
-debugger
-let messagesElemants = props.dialogs.map((obj) => {
-  
-
-    return (
-       <div><Message key={obj.id} id={obj.id} message={obj.messages}  /></div>  
-       
-    )
-})
-
 
 
 
 let addNewMessege = (values) => {
-    debugger
-  //  alert(values.newMessageText) //указывается значение name из Field
-   props.sendMessage(values.newMessageText)
+ 
+   props.sendMessage(isUser, values.body)
+  
 }
+
+
+
+
+
+
 
 //alert (props.isAuth)
 //перенесено в AuthRedirectComponent в DialogsContainer
@@ -62,7 +71,7 @@ let addNewMessege = (values) => {
   
         <div className={style.dialog_items}>
             <h2>Dialogs</h2>
-            <button onClick={()=> {props.getChating()}}>get users</button>
+         
                
             {dialogsElements}
          
@@ -70,8 +79,10 @@ let addNewMessege = (values) => {
         </div>
     
         <div className={style.messages}> 
-            <div>{messagesElemants}</div>
-          <AddMessageFormRedux onSubmit={addNewMessege} />
+        <MessageBlock friendId={isUser} dialogs={props.dialogs} />
+            
+            {friendId  ? <AddMessageFormRedux onSubmit={addNewMessege}  />: <div>select a dialog</div>}
+          
         </div>
         <div>
             
@@ -86,7 +97,7 @@ const AddMessageForm = (props) => {
     return (
         <form onSubmit={props.handleSubmit}>
         <div className={style.block_textarea}>
-            <Field component={Textarea} name="newMessageText"  placeholder='Enter your message'
+            <Field component={Textarea} name="body"  placeholder='Enter your message'
             validate={[requiredField, maxLength50]}/>
       
         </div>
@@ -97,5 +108,11 @@ const AddMessageForm = (props) => {
     )
 }
 
-const AddMessageFormRedux =  reduxForm({form: 'dialogAddMessageForm' }) (AddMessageForm)
+
+const afterSubmit = (result, dispatch) =>
+  dispatch(reset('dialogAddMessageForm')); //очитска полей формы после отправки
+
+const AddMessageFormRedux =  reduxForm({form: 'dialogAddMessageForm',  
+onSubmitSuccess: afterSubmit, }) (AddMessageForm)
+
 

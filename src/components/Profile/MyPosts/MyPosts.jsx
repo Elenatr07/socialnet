@@ -1,40 +1,53 @@
-import React from "react";
+import React, { useEffect } from "react";
 import Post from "./Post/Post";
 import style from "./MyPosts.module.css";
-import { Field, reduxForm } from "redux-form";
+import { Field, reduxForm, reset } from "redux-form";
 import {
   maxLengthCreator,
   requiredField,
 } from "../../../utils/validators/validator";
 import { Textarea } from "../../FormControls/FormControls";
+import MessageBlock from "../../Dialogs/MessageBlock";
 
 const maxLength310 = maxLengthCreator(310); //устанавливаем значие длины сообщения
 
 //React.memo для контроля перерендинга в функциональной компоненте, перерендинг ТОЛЬКО при изменении пропс или стайт
 //в классовой компоненте для этих целей надо использовать extends React.PureComponent
-const MyPosts = React.memo((props) => {
+function MyPosts(props) {
+
+  let userId = props.router.params.userId;
+  let owner = props.owner
+ 
+  let isUser = !userId ? owner : userId
+  
  //alert('render')
  //console.log("RENDER")
- //функция reverse изменяет state, чтобы этого не было компонента должна для работы сосздать КОПИЮ стайта [...props.postsData], а не использовать сам стайт props.postsData
-  let postsElements = [...props.postsData].reverse().map((obj) => { 
-    return <Post key={obj.id} message={obj.post} likesCount={obj.likesCount} />;
-  });
+
+ 
 
   let onAddPost = (values) => {
-    props.addPost(values.newPostText); //newPostText название name из Field
+    props.sendMessage(isUser, values.body); //newPostText название name из Field
   };
+
+  useEffect(()=> {
+    props.getListMessages(isUser)
+  }, [])
 
   return (
     <div>
-      <h2 className={style.title}>My posts</h2>
+      {userId ? <div>
+        <h2 className={style.title}>My posts</h2>
 
       <AddPostFormRedux onSubmit={onAddPost} />
 
       <div className={style.new_posts}>New posts</div>
-      {postsElements}
+      <MessageBlock friendId={isUser} dialogs={props.dialogs} owner={owner} />
+      </div> : <div></div>  }
+      
+      
     </div>
   );
-})
+}
 
 
 
@@ -43,7 +56,7 @@ const addPostForm = (props) => {
     <form onSubmit={props.handleSubmit}>
       <Field
         component={Textarea}
-        name="newPostText"
+        name="body"
         validate={[requiredField, maxLength310]}
         placeholder="Post text"
       />
@@ -54,5 +67,10 @@ const addPostForm = (props) => {
     </form>
   );
 };
-const AddPostFormRedux = reduxForm({ form: "myPostsAddForm" })(addPostForm);
+
+const afterSubmit = (result, dispatch) =>
+  dispatch(reset('myPostsAddForm')); //очистка полей формы после отправки
+
+const AddPostFormRedux = reduxForm({ form: "myPostsAddForm",
+onSubmitSuccess: afterSubmit,})(addPostForm);
 export default MyPosts;

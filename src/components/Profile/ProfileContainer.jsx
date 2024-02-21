@@ -10,7 +10,7 @@ import { withAuthRedirect } from "../../hoc/withAuthRedirect";
 import { compose } from "redux";
 
 //withRouter чтобы прокидывать url адрес пользователя в profile
-function withRouter(Component) {
+export function withRouter(Component) {
     function ComponentWithRouterProp(props) {
         let location = useLocation();
         let navigate = useNavigate();
@@ -102,7 +102,8 @@ class ProfileContainer extends React.Component  {
       //  isAuth: state.auth.isAuth
       status: state.profilePage.status,
       authorezedUserId: state.auth.id,
-      isAuth: state.auth.isAuth
+      isAuth: state.auth.isAuth,
+      dialogs: state.dialogsPage.dialogs,
        
     })
 

@@ -101,7 +101,7 @@ export const securityAPI = {
 }
 
 export const dialogsAPI = {
-  startChating (friendId) {
+  getListMessages (friendId) {
     return  axios.get(`https://social-network.samuraijs.com/api/1.0/dialogs/${friendId}/messages`,
      {withCredentials:true,
       headers: {"API-KEY": "0d1f131a-af70-4463-84c0-a73c20105bab"}
@@ -113,10 +113,12 @@ export const dialogsAPI = {
       headers: {"API-KEY": "0d1f131a-af70-4463-84c0-a73c20105bab"}
     })
   },
-  sendMessage (body) {
-    return  axios.post(`https://social-network.samuraijs.com/api/1.0/dialogs/30791/messages`, ({body}),
+  sendMessage (friendId, body) {
+    return  axios.post(`https://social-network.samuraijs.com/api/1.0/dialogs/${friendId}/messages`, ({body}),
      {withCredentials:true,
       headers: {"API-KEY": "0d1f131a-af70-4463-84c0-a73c20105bab"}
     } )
-  }
+  },
+ 
+
 }

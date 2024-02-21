@@ -37,6 +37,7 @@
 
 .message {
     margin-top: 15px;
+    display: flex;
 }
 
 .send_message {
@@ -55,4 +56,39 @@
 }
 .block_textarea {
     margin-top: 25px;
+}
+.dialogsPhoto {
+    width: 20px;
+    margin: 15px auto;
+    height: 20px;
+}
+.photoBlock {
+   
+    margin-right: 15px;
+    
+}
+.messageBody {
+    background-color: thistle;
+    width: 45%;
+    border-radius: 30px;
+    padding: 5px 15px;
+    margin: 5px 5px;
+}
+.friendBlock {
+    display: flex;
+}
+.nameFriend {
+    margin: 15px 5px;
+    display: flex;
+    justify-content: space-between;
+    width: 14rem;
+}
+.newMessages {
+    background-color:  thistle;
+    border-radius: 30px;
+    padding: 5px 10px;
+    width: 20px;
+    height: 20px;
+    text-align: center;
+   
 }

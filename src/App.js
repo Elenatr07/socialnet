@@ -18,8 +18,10 @@ const ProfileContainer = React.lazy(()=> import ('./components/Profile/ProfileCo
 const DialogsContainer = React.lazy(()=> import ('./components/Dialogs/DialogsContainer'));
 
 
+//window.history.replaceState(null, "New Page Title", "/profile")
 
 class App extends React.Component {
+ 
   catchAllUnhandledErrors = (promiseRejectionEvent) => {
     alert("some error occured") //если в компоненте прописан локальный обработчик ошибки то глобальный уже не сработает на эту ошибку
   }
@@ -61,18 +63,20 @@ componentWillUnmount() { //требуется обязательно если в
                    <Route path='/profile/:userId?'
                           element={<ProfileContainer/>}/> 
                    
-                    <Route path='/dialogs/*' 
-                          element={<DialogsContainer 
-                              // store={props.store}
-                                 />} />
+                  
+                      <Route path='/dialogs/:friendId?' 
+                      element={<DialogsContainer 
+                        
+                  // store={props.store}
+                      />} />
                     <Route path='/users/*' 
                   element={<UsersContainer />} />
                         
-                    <Route path='/login/*' 
-                  element={<Login/>} /> 
+                    <Route path='/login/*' element={<Login/>} /> 
                   <Route path='*' element={<PageNotFound />} />
                   <Route path='/home' element={<Home />} />
                    <Route path='' element={<Home />} />
+                   
                
                   
                 </Routes>
