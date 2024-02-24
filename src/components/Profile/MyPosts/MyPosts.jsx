@@ -41,7 +41,7 @@ function MyPosts(props) {
       <AddPostFormRedux onSubmit={onAddPost} />
 
       <div className={style.new_posts}>New posts</div>
-      <MessageBlock friendId={isUser} dialogs={props.dialogs} owner={owner} />
+      <MessageBlock friendId={isUser} dialogs={props.dialogs} owner={owner} data={props.dialogsData} />
       </div> : <div></div>  }
       
       

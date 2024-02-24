@@ -9,6 +9,7 @@ let url = "https://buzookod.ru/media/2816616767_vubrbeJ.jpg";
 
 export default function ProfileInfo(props) {
 
+
 let [editMode, setEditMode] = useState(false);
 
   if (!props.profile) {

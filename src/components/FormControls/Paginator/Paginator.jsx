@@ -3,6 +3,7 @@ import style from './Paginator.module.css';
 import cn from "classnames"
 
 let Paginator = (props) => {
+
         let pagesCount = Math.ceil( props.totalItemsCount / props.pageSize) //определение кол-ва страниц
         let pages= [];
         for (let i=1; i <= pagesCount; i++) {

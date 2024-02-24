@@ -6,6 +6,8 @@ import { NavLink } from 'react-router-dom';
 
 let url = "https://buzookod.ru/media/2816616767_vubrbeJ.jpg";
 export default function Dialog (props) {
+
+
   return (
   <div >
     <div className={style.friendBlock}>

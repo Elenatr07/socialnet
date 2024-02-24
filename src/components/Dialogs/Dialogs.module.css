@@ -1,94 +1,128 @@
 .dialogs {
-    display: flex;
-    width: 100%;
-    
-
+  display: flex;
+  width: 100%;
 }
 
 .dialog_items {
-    width: 30%;
-    border: 2px solid lavender;
-    
-
+  width: 30%;
+  border: 2px solid lavender;
 }
 .dialog_items h2 {
-    margin-left: 25px;
+  margin-left: 25px;
 }
 .dialog {
-    margin-left: 25px;
-    margin-top: 15px;
-    display: block;
-    
-    
-
+  margin-left: 25px;
+  margin-top: 15px;
+  display: block;
 }
 .active {
-    color: darkviolet;
-    margin-left: 25px;
-    margin-top: 15px;
-   display: block;
+  color: darkviolet;
+  margin-left: 25px;
+  margin-top: 15px;
+  display: block;
 }
 
 .messages {
-    margin: 60px 50px  50px;
-    width: 70%;
-
+  margin: 60px 50px 50px;
+  width: 70%;
 }
 
 .message {
-    margin-top: 15px;
-    display: flex;
+  margin-top: 15px;
+  display: flex;
+  justify-content: left;
 }
 
 .send_message {
-    background-color: thistle;
-    border: 1px solid lightslategray;
-    border-radius: 5px;
-    width: 85px;
-    height: 35px;
-    margin-top: 25px;
+  background-color: thistle;
+  border: 1px solid lightslategray;
+  border-radius: 5px;
+  width: 85px;
+  height: 35px;
+  margin-top: 25px;
 }
 .button_block {
-    display: flex;
-    justify-content: end;
-    margin-right: 25px;
-
+  display: flex;
+  justify-content: end;
+  margin-right: 25px;
 }
 .block_textarea {
-    margin-top: 25px;
+  margin-top: 25px;
 }
 .dialogsPhoto {
-    width: 20px;
-    margin: 15px auto;
-    height: 20px;
+  width: 20px;
+  margin: 15px auto;
+  height: 20px;
 }
 .photoBlock {
-   
-    margin-right: 15px;
-    
+  margin-right: 15px;
 }
 .messageBody {
-    background-color: thistle;
-    width: 45%;
-    border-radius: 30px;
-    padding: 5px 15px;
-    margin: 5px 5px;
+  background-color: thistle;
+
+  border-radius: 30px;
+  padding: 5px 15px;
+  margin: 5px 5px;
+  display: flex;
+  justify-content: space-between;
 }
 .friendBlock {
-    display: flex;
+  display: flex;
 }
 .nameFriend {
-    margin: 15px 5px;
-    display: flex;
-    justify-content: space-between;
-    width: 14rem;
+  margin: 15px 5px;
+  display: flex;
+  justify-content: space-between;
+  width: 14rem;
 }
 .newMessages {
-    background-color:  thistle;
-    border-radius: 30px;
-    padding: 5px 10px;
-    width: 20px;
-    height: 20px;
-    text-align: center;
-   
+  background-color: thistle;
+  border-radius: 30px;
+  padding: 5px 10px;
+  width: 20px;
+  height: 20px;
+  text-align: center;
+}
+.messageBodyRecieved {
+  background-color: lightgray;
+  display: flex;
+  justify-content: space-between;
+
+  border-radius: 30px;
+  padding: 5px 15px;
+  margin: 5px 5px;
+}
+.messageRecieved {
+  margin-top: 15px;
+  display: flex;
+  justify-content: right;
+}
+.messageBlock {
+  display: flex;
+  flex-direction: column;
+  width: 45%;
+}
+.dateBlock {
+    display: flex;
+    justify-content: space-between;
+}
+.newMessage {
+  background-color: lightgray;
+  border-radius: 30px;
+  padding: 5px 15px;
+  margin: 5px 5px;
+  display: flex;
+  justify-content: space-between;
+}
+.checkMark{
+  width: 20px;
+}
+.checkMarkBox {
+  margin: auto 0;
+  display: flex;
+  flex-direction: column;
+}
+.backet {
+  width: 20px;
+  margin-bottom: 3px;
 }

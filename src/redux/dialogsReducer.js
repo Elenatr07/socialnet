@@ -1,18 +1,26 @@
 import { dialogsAPI, usersAPI } from "../api/api";
-import { setCurrentPageCreator, setTotalUsersCountCreator } from "./usersReducer";
+
 
 
 const SEND_MESSAGE = 'dialogs/SEND_MESSAGE';
 const GET_LIST = 'dialogs/GET_LIST'
 const GET_FRIENDS= 'dialogs/GET_FRIENDS'
 const GET_CHARTING = 'dialogs/GET_CHARTING'
+const SET_CORRENT_PAGE = 'dialogs/SET_CORRENT_PAGE'
+const SET_TOTAL_MESSAGES_COUNT ='dialogs/SET_TOTAL_MESSAGES_COUNT'
+const DEL_MESSAGE = 'dialogs/DEL_MESSAGE'
+
 
 
 let initialState = {
      dialogsData: [],
     dialogs: [],
     friends: [],
-    chats:[]
+    chats:[],
+    pageSize: 10, //количество выводимых страниц
+    totalMessagesCount: 0,
+    currentPage: 1,
+    
         
 }
 export const dialogsReducer = (state=initialState, action) => {
@@ -61,9 +69,27 @@ export const dialogsReducer = (state=initialState, action) => {
                     ...state,
                     dialogsData: action.dialogsData
                 }
+                case SET_CORRENT_PAGE:
+                    return {
+                        ...state,
+                        currentPage: action.currentPage
+                    }
+                    case SET_TOTAL_MESSAGES_COUNT:
+                        return {
+                            ...state,
+                            totalMessagesCount: action.count
+
+                        }
+                case DEL_MESSAGE:
+                    return{
+                        ...state,
+                        dialogs: state.dialogs.filter(message => message.id !==action.messageId)
+                        
+                    }
             
             default:
                 return state;
+                
     }
 
     
@@ -107,15 +133,32 @@ export const sendMessageCreator = (body) => { //body это название nam
         type: SEND_MESSAGE, body
     }
 }
+export const setCurrentPageCreator = (currentPage) => {
+    return {
+        type: SET_CORRENT_PAGE, currentPage
+    }
+}
+export const setTotalMessagesCountCreator = (totalMessagesCount) => {
+    return {
+        type: SET_TOTAL_MESSAGES_COUNT, count: totalMessagesCount
+    }
+}
 
+export const delMessageCreator = (messageId) => {
+    return {
+        type: DEL_MESSAGE, messageId
+    }
+}
 
 
 //thunk
 
-export const getListMessagesThunk = (friendId) => async (dispatch) => {
-    const res = await dialogsAPI.getListMessages(friendId)
-    
+export const getListMessagesThunk = (friendId, currentPage, pageSize) => async (dispatch) => {
+    const res = await dialogsAPI.getListMessages(friendId, currentPage, pageSize)
+      //dispatch (setCurrentPageCreator(currentPage))
         dispatch (getListMessagesCreator(res.data.items))
+        
+        dispatch(setTotalMessagesCountCreator(res.data.totalCount))
     
 
 }
@@ -123,7 +166,7 @@ export const getListMessagesThunk = (friendId) => async (dispatch) => {
 export const getFriendsThunk = (currentPage, pageSize) => async (dispatch) => {
     const res = await usersAPI.getUsers(currentPage, pageSize)
     dispatch(getFriendsCreator(res.items));
-    dispatch(setTotalUsersCountCreator(res.totalCount));
+    dispatch(setTotalMessagesCountCreator(res.totalCount));
     dispatch(setCurrentPageCreator(currentPage));
 
 }
@@ -142,6 +185,11 @@ export const sendMessageThunk = (friendId, body) => async (dispatch) => {
          
       }
    
+}
+
+export const delMessageThunk = (messageId) => async (dispatch) => {
+    await dialogsAPI.delMessage(messageId);
+    dispatch(delMessageCreator(messageId))
 }
 
 

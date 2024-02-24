@@ -1,6 +1,6 @@
 import React from 'react'
 
-import { getChatingThunk, getFriendsThunk, getListMessagesThunk, sendMessageCreator, sendMessageThunk, startChatingThunk } from '../../redux/dialogsReducer'
+import { delMessageThunk, getChatingThunk, getFriendsThunk, getListMessagesThunk, sendMessageCreator, sendMessageThunk, startChatingThunk } from '../../redux/dialogsReducer'
 import Dialogs from './Dialogs'
 import { connect } from 'react-redux'
 
@@ -31,10 +31,11 @@ import { withRouter } from '../Profile/ProfileContainer'
            // isAuth: state.auth.isAuth
            dialogs: state.dialogsPage.dialogs,
            friends: state.dialogsPage.friends,
-           pageSize: getPageSize(state),
-           totalUsersCount: getTotalUsersCount(state),
-            currentPage: getcurrentPaget(state),
-            owner: state.auth.id
+           pageSize: state.dialogsPage.pageSize,
+           totalMessagesCount: state.dialogsPage.totalMessagesCount,
+            currentPage: state.dialogsPage.currentPage,
+            owner: state.auth.id,
+        
 
 
         }
@@ -58,6 +59,8 @@ import { withRouter } from '../Profile/ProfileContainer'
     getUsersThunk: getUsersThunkCreator,
     getChating: getChatingThunk,
     sendMessage:sendMessageThunk,
+    delMessage: delMessageThunk
+
     
 }),
     withRouter,

@@ -1,4 +1,4 @@
-import React, { useEffect  } from 'react'
+import React, { useEffect, useState  } from 'react'
 import style from "./Dialogs.module.css"
 
 import Dialog from './Dialog/Dialog'
@@ -8,6 +8,7 @@ import {Field, reduxForm, reset } from "redux-form"
 import { Textarea } from '../FormControls/FormControls'
 import { maxLengthCreator, requiredField } from '../../utils/validators/validator'
 import MessageBlock from './MessageBlock'
+import Paginator from '../FormControls/Paginator/Paginator'
 
 
 
@@ -16,10 +17,11 @@ import MessageBlock from './MessageBlock'
 
 export default function Dialogs(props) {
 
-    
 let friendId = props.router.params.friendId;
 let owner = props.owner
 let isUser = !friendId ? owner : friendId
+let onPageChanged = (currentPage) => {
+    props.getListMessages(friendId, currentPage, props.pageSize)}
 
 useEffect(()=> {
     
@@ -27,21 +29,23 @@ useEffect(()=> {
 }, [])
 
 useEffect(()=> {
-    props.getListMessages(isUser)
-}, [isUser])
+    props.getListMessages(isUser, props.currentPage, props.pageSize)
+}, [props.currentPage])
 
 
 
 
 let dialogsElements = props.dialogsData.map((obj) => {
-
-
+   
+      
     return(
       
         <NavLink className={navData=> navData.isActive ? style.active : style.dialog} 
         to={"/dialogs/"+ obj.id} onClick={()=> {props.getListMessages(obj.id)}}>
             <Dialog key={obj.id} name={obj.userName} id={obj.id} newMessages={obj.newMessagesCount} 
-            photos={obj.photos} lastdialog = {obj.lastDialogActivityDate} lastActivity={obj.lastUserActivityDate} /> 
+            photos={obj.photos} lastdialog = {obj.lastDialogActivityDate} lastActivity={obj.lastUserActivityDate}
+              />
+
         </NavLink>
        
     )
@@ -79,9 +83,15 @@ let addNewMessege = (values) => {
         </div>
     
         <div className={style.messages}> 
-        <MessageBlock friendId={isUser} dialogs={props.dialogs} />
+        <MessageBlock friendId={isUser} dialogs={props.dialogs} owner={owner} 
+        delMessage={props.delMessage}  />
+        <Paginator   currentPage={props.currentPage} 
+                onPageChanged={onPageChanged} 
+                totalItemsCount={props.totalMessagesCount}
+                pageSize={props.pageSize} />
             
             {friendId  ? <AddMessageFormRedux onSubmit={addNewMessege}  />: <div>select a dialog</div>}
+
           
         </div>
         <div>
